@@ -9688,6 +9688,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1e340960e516b247aa77dce0835cc48, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  GreenTile: {fileID: 1301635781003332, guid: c3e5cf525e5836545b98041153781360, type: 2}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -10000,6 +10001,12 @@ Prefab:
       propertyPath: mGrid
       value: 
       objectReference: {fileID: 580613840}
+    - target: {fileID: 114324406443162148, guid: 47e6d369c7616c54db1580aa697eb94a,
+        type: 2}
+      propertyPath: GreenTile
+      value: 
+      objectReference: {fileID: 1301635781003332, guid: c3e5cf525e5836545b98041153781360,
+        type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 47e6d369c7616c54db1580aa697eb94a, type: 2}
   m_IsPrefabAsset: 0
@@ -10090,6 +10097,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06e7f5a0d4ee5ef4797d168d5d404639, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  s: {fileID: 21300000, guid: 35858d48f213b274b8df815780459eec, type: 3}
 --- !u!1 &2133935675
 GameObject:
   m_ObjectHideFlags: 0

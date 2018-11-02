@@ -18,13 +18,6 @@ public class MouseLocation : MonoBehaviour {
         mMouseWorldPosition = Camera.main.ScreenToWorldPoint(mMousePosition).toV2();
     }
 
-    void GetMouseCoordinate()
-    {
-        var mousePos = Input.mousePosition;
-        mousePos.z = 15;
-        var mouseWorldPos = Camera.main.ScreenToWorldPoint(mousePos).toV2();
-    }
-
     public Vector3 GetMouseWorldPosition()
     {
         return mMouseWorldPosition;
