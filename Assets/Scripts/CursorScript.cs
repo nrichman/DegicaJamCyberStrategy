@@ -4,38 +4,43 @@ using UnityEngine;
 
 public class CursorScript : MonoBehaviour
 {
-
-    public Grid mGrid;
     private Vector3Int mLastPos;
-    private Transform mTileSelector;
+    private GameObject mTileSelector;
+    private MouseLocation mMouseLocation;
 
-    // Use this for initialization
     void Start()
     {
         Cursor.visible = false;
         mLastPos = new Vector3Int(0, 0, 0);
-        mTileSelector = transform.Find("TileSelector");
+        mTileSelector = GameObject.Find("TileSelector");
+        mMouseLocation = transform.parent.gameObject.GetComponent<MouseLocation>();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        var mousePos = Input.mousePosition;
-        mousePos.z = 15;
-        var mouseWorldPos = Camera.main.ScreenToWorldPoint(mousePos).toV2();
-        transform.position = mouseWorldPos;
+        // Move the cursor image to the mouse position
+        transform.position = mMouseLocation.GetMouseWorldPosition();
 
-        Vector3Int coordinate = mGrid.WorldToCell(mouseWorldPos);
+        // Move the tile selector to the mouse position
+        Vector3Int coordinate = mMouseLocation.GetMouseCellPosition();
         Debug.Log(coordinate);
         if (mLastPos != coordinate)
         {
-            mTileSelector.position = coordinate;
+            mTileSelector.transform.position = coordinate;
+            mLastPos = coordinate;
         }
 
-    }
-
-    void drawSelect(Vector3Int coordinate)
-    {
-        Debug.Log("CHANGED");
+        if (Input.GetMouseButtonDown(0))
+        {
+            Collider2D[] mColliders;
+            if ((mColliders = Physics2D.OverlapCircleAll(transform.position, 1f)).Length > 0)
+            {
+                foreach (var collider in mColliders)
+                {
+                    var go = collider.gameObject; //This is the game object you collided with
+                    Debug.Log(go.name);
+                }
+            }
+        }
     }
 }
