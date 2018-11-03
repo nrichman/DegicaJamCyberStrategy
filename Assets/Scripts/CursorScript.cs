@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class CursorScript : MonoBehaviour
@@ -8,12 +9,11 @@ public class CursorScript : MonoBehaviour
     public GameObject[] TileNumbers;
 
     private Vector3Int mLastPos; // Last tile visited to highlight with the TileSelector
-    private Vector3Int mLastPlacedTile;
     private GameObject mTileSelector;
     private MouseLocation mMouseLocation;
-    private List<GameObject> mGreenTiles;
+    private List<GameObject> mDrawnObjects;
 
-    private Stack mMovementStack;
+    private List<Vector3> mMovementStack;
     private GameObject mSelectedCharacter;
 
     void Start()
@@ -22,8 +22,8 @@ public class CursorScript : MonoBehaviour
         mLastPos = new Vector3Int(0, 0, 0);
         mTileSelector = GameObject.Find("TileSelector");
         mMouseLocation = transform.parent.gameObject.GetComponent<MouseLocation>();
-        mGreenTiles = new List<GameObject>();
-        mMovementStack = new Stack();
+        mDrawnObjects = new List<GameObject>();
+        mMovementStack = new List<Vector3>();
     }
 
     void Update()
@@ -50,8 +50,9 @@ public class CursorScript : MonoBehaviour
                     // If mouse collided with a friendly unit, start building its movement stack
                     if (collider.tag == "FriendlyUnit")
                     {
+                        mDrawnObjects.Add(Instantiate(GreenTile, MouseCellPos, new Quaternion()));
                         mSelectedCharacter = collider.gameObject;
-                        mLastPlacedTile = MouseCellPos;
+                        mMovementStack.Add(MouseCellPos);
                         StartCoroutine(DrawingMachine());
                     }
                 }
@@ -66,37 +67,80 @@ public class CursorScript : MonoBehaviour
         while (!Input.GetMouseButtonUp(0))
         {
             var MouseCellPos = mMouseLocation.GetMouseCellPosition();
-            if (mLastPos != MouseCellPos)
+            if (mMovementStack[mMovementStack.Count - 1] != MouseCellPos)
             {
-                // Ensure the tile is adjacent
-                if (IsAdjacent(mLastPlacedTile, MouseCellPos) && mSelectedCharacter.GetComponent<Movement>().Speed > mMovementStack.Count)
+                // Ensure the tile is adjacent and capped at our character's speed
+                if (IsAdjacent(mMovementStack[mMovementStack.Count - 1], MouseCellPos)
+                    && mSelectedCharacter.GetComponent<Movement>().Speed > mMovementStack.Count - 1)
                 {
-                    mLastPlacedTile = MouseCellPos;
-                    mGreenTiles.Add(Instantiate(GreenTile, MouseCellPos, new Quaternion()));
-                    mGreenTiles.Add(Instantiate(TileNumbers[mMovementStack.Count], MouseCellPos, new Quaternion()));
-                    mMovementStack.Push(MouseCellPos);
+                    DrawMovementColors(MouseCellPos);
+                    mMovementStack.Add(MouseCellPos);
                 }
             }
             yield return null;
         }
 
         // Clean up the green tiles
-        if (mGreenTiles.Count > 0)
+        if (mDrawnObjects.Count > 0)
         {
-            foreach (GameObject go in mGreenTiles)
+            foreach (GameObject go in mDrawnObjects)
             {
                 Destroy(go);
             }
-            mGreenTiles.Clear();
-            mMovementStack.Clear();
+            mDrawnObjects.Clear();
         }
+
+        // Clear the movement stack
+        mMovementStack.Clear();
     }
 
     public bool IsAdjacent(Vector3 a, Vector3 b)
     {
         float dx = Mathf.Abs(a.x - b.x);
         float dy = Mathf.Abs(a.y - b.y);
-        Debug.Log(dx + dy);
         return dx + dy == 1;
+    }
+
+    // Draws the movement plan on the screen
+    public void DrawMovementColors(Vector3 Coordinate)
+    {
+        var newGreenTile = Instantiate(GreenTile, Coordinate, new Quaternion());
+        var newNumberTile = Instantiate(TileNumbers[mMovementStack.Count - 1], Coordinate, new Quaternion());
+        newNumberTile.transform.parent = newGreenTile.transform;
+
+        // Count how many tiles are on that space
+        int repeatCount = 0;
+        foreach (Vector3 v in mMovementStack.Skip(1).Take(mMovementStack.Count - 1))
+        {
+            if (v == Coordinate)
+            {
+                repeatCount++;
+            }
+        }
+
+        // Shift our number counter over based on how many tiles are on the space
+        switch (repeatCount) {
+            case 0:
+                newNumberTile.transform.position += new Vector3(.05f, .55f, 0);
+                break;
+            case 1:
+                newNumberTile.transform.position += new Vector3(.55f, .55f, 0);
+                newGreenTile.GetComponent<SpriteRenderer>().enabled = false;
+                break;
+            case 2:
+                newNumberTile.transform.position += new Vector3(.05f, .05f, 0);
+                newGreenTile.GetComponent<SpriteRenderer>().enabled = false;
+                break;
+            case 3:
+                newNumberTile.transform.position += new Vector3(.55f, .05f, 0);
+                newGreenTile.GetComponent<SpriteRenderer>().enabled = false;
+                break;
+            default:
+                break;
+        }
+
+        // Add drawn to a list for cleanup
+        mDrawnObjects.Add(newGreenTile);
+        mDrawnObjects.Add(newNumberTile);
     }
 }

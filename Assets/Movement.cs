@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Movement : MonoBehaviour {
 
-    public int Speed = 6;
+    public int Speed = 7;
     Stack mMovementStack;
 
 	void Start ()
