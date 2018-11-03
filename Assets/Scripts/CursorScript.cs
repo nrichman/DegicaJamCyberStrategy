@@ -5,13 +5,16 @@ using UnityEngine;
 public class CursorScript : MonoBehaviour
 {
     public GameObject GreenTile;
+    public GameObject[] TileNumbers;
 
     private Vector3Int mLastPos; // Last tile visited to highlight with the TileSelector
     private Vector3Int mLastPlacedTile;
     private GameObject mTileSelector;
     private MouseLocation mMouseLocation;
-    private List<Vector3Int> mVisitedPositions;
     private List<GameObject> mGreenTiles;
+
+    private Stack mMovementStack;
+    private GameObject mSelectedCharacter;
 
     void Start()
     {
@@ -19,8 +22,8 @@ public class CursorScript : MonoBehaviour
         mLastPos = new Vector3Int(0, 0, 0);
         mTileSelector = GameObject.Find("TileSelector");
         mMouseLocation = transform.parent.gameObject.GetComponent<MouseLocation>();
-        mVisitedPositions = new List<Vector3Int>();
         mGreenTiles = new List<GameObject>();
+        mMovementStack = new Stack();
     }
 
     void Update()
@@ -36,16 +39,21 @@ public class CursorScript : MonoBehaviour
             mLastPos = MouseCellPos;
         }
 
+        // On mouse down, see if we're hovering over a player character to start movement
         if (Input.GetMouseButtonDown(0))
         {
             Collider2D[] mColliders;
-            if ((mColliders = Physics2D.OverlapCircleAll(transform.position, 1f)).Length > 0)
+            if ((mColliders = Physics2D.OverlapCircleAll(transform.position, 0f)).Length > 0)
             {
                 foreach (var collider in mColliders)
                 {
-                    Debug.Log(collider.gameObject.name);
-                    mLastPlacedTile = MouseCellPos;
-                    StartCoroutine(DrawingMachine());
+                    // If mouse collided with a friendly unit, start building its movement stack
+                    if (collider.tag == "FriendlyUnit")
+                    {
+                        mSelectedCharacter = collider.gameObject;
+                        mLastPlacedTile = MouseCellPos;
+                        StartCoroutine(DrawingMachine());
+                    }
                 }
             }
         }
@@ -54,21 +62,25 @@ public class CursorScript : MonoBehaviour
     // Draws green tiles under the player's movement selection
     IEnumerator DrawingMachine()
     {
+        // Draw green tiles until mouse button goes up
         while (!Input.GetMouseButtonUp(0))
         {
             var MouseCellPos = mMouseLocation.GetMouseCellPosition();
-            if (mLastPos != MouseCellPos && !mVisitedPositions.Contains(MouseCellPos))
+            if (mLastPos != MouseCellPos)
             {
-                if (IsAdjacent(mLastPlacedTile, MouseCellPos))
+                // Ensure the tile is adjacent
+                if (IsAdjacent(mLastPlacedTile, MouseCellPos) && mSelectedCharacter.GetComponent<Movement>().Speed > mMovementStack.Count)
                 {
                     mLastPlacedTile = MouseCellPos;
-                    mVisitedPositions.Add(MouseCellPos);
                     mGreenTiles.Add(Instantiate(GreenTile, MouseCellPos, new Quaternion()));
+                    mGreenTiles.Add(Instantiate(TileNumbers[mMovementStack.Count], MouseCellPos, new Quaternion()));
+                    mMovementStack.Push(MouseCellPos);
                 }
             }
             yield return null;
         }
 
+        // Clean up the green tiles
         if (mGreenTiles.Count > 0)
         {
             foreach (GameObject go in mGreenTiles)
@@ -76,7 +88,7 @@ public class CursorScript : MonoBehaviour
                 Destroy(go);
             }
             mGreenTiles.Clear();
-            mVisitedPositions.Clear();
+            mMovementStack.Clear();
         }
     }
 
