@@ -45,6 +45,20 @@ public class Movement : MonoBehaviour {
         mMovementStack = MovementStack;
     }
 
+    public List<Vector3> GetMovementStack()
+    {
+        List<Vector3> MovementList = new List<Vector3>();
+        Stack<Vector3> TempMovementStack = new Stack<Vector3>(mMovementStack);
+
+        while (TempMovementStack.Count > 0)
+        {
+            MovementList.Add(TempMovementStack.Pop());
+        }
+        MovementList.Add(gameObject.transform.position);
+        MovementList.Reverse();
+        return MovementList;
+    }
+
     public void StartMovement()
     {
         StartCoroutine(MovementMachine());
