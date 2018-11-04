@@ -48,6 +48,9 @@ TagManager:
   - name: UI
     uniqueID: 3832398223
     locked: 0
+  - name: Canvas
+    uniqueID: 638346271
+    locked: 0
   - name: Cursor
     uniqueID: 1241222229
     locked: 0

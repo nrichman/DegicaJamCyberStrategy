@@ -9,6 +9,9 @@ public class Movement : MonoBehaviour {
     Stack<Vector3> mMovementStack;
     private Animator mAnimator;
     private float mStep;
+
+    public bool mLocked = false;
+
 	void Start ()
     {
         mMovementStack = new Stack<Vector3>();
@@ -20,7 +23,7 @@ public class Movement : MonoBehaviour {
 		
 	}
 
-    // Draws green tiles under the player's movement selection
+    // Move the player through their stack
     IEnumerator MovementMachine()
     {
         SetAnimationDirection(transform.position, mMovementStack.Peek());
@@ -35,7 +38,6 @@ public class Movement : MonoBehaviour {
             }
             yield return null;
         }
-        Debug.Log("DONE MOVING");
     }
 
     public void SetMovementStack(Stack<Vector3> MovementStack)
@@ -67,6 +69,17 @@ public class Movement : MonoBehaviour {
             else
                 mAnimator.SetInteger("Direction", 3);
         }
+    }
+
+    public void Lock()
+    {
+        mLocked = true;
+        gameObject.GetComponent<SpriteRenderer>().color = new Color(.5f, .5f, .5f, 1);
+    }
+
+    public void Unlock()
+    {
+        mLocked = false;
     }
 }
 

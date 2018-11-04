@@ -18,7 +18,6 @@ public class CursorScript : MonoBehaviour
 
     void Start()
     {
-        Cursor.visible = false;
         mLastPos = new Vector3Int(0, 0, 0);
         mTileSelector = GameObject.Find("TileSelector");
         mMouseLocation = transform.parent.gameObject.GetComponent<MouseLocation>();
@@ -28,9 +27,6 @@ public class CursorScript : MonoBehaviour
 
     void Update()
     {
-        // Move the cursor image to the mouse position
-        transform.position = mMouseLocation.GetMouseWorldPosition();
-
         // Move the tile selector to the mouse position
         Vector3Int MouseCellPos = mMouseLocation.GetMouseCellPosition();
         if (mLastPos != MouseCellPos)
@@ -43,17 +39,25 @@ public class CursorScript : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             Collider2D[] mColliders;
-            if ((mColliders = Physics2D.OverlapCircleAll(transform.position, 0f)).Length > 0)
+            if ((mColliders = Physics2D.OverlapCircleAll(mMouseLocation.GetMouseWorldPosition(), 0f)).Length > 0)
             {
                 foreach (var collider in mColliders)
                 {
                     // If mouse collided with a friendly unit, start building its movement stack
                     if (collider.tag == "FriendlyUnit")
                     {
-                        mDrawnObjects.Add(Instantiate(GreenTile, MouseCellPos, new Quaternion()));
-                        mSelectedCharacter = collider.gameObject;
-                        mMovementStack.Add(MouseCellPos);
-                        StartCoroutine(DrawingMachine());
+                        Debug.Log("??");
+                        if (collider.GetComponent<Movement>().mLocked)
+                        {
+
+                        }
+                        else
+                        {
+                            mDrawnObjects.Add(Instantiate(GreenTile, MouseCellPos, new Quaternion()));
+                            mSelectedCharacter = collider.gameObject;
+                            mMovementStack.Add(MouseCellPos);
+                            StartCoroutine(DrawingMachine());
+                        }
                     }
                 }
             }
