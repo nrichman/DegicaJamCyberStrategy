@@ -91,9 +91,16 @@ public class CursorScript : MonoBehaviour
         }
 
         // Clear the movement stack
+        Stack<Vector3> PlayerMovement = new Stack<Vector3>();
+        for (int i = mMovementStack.Count - 1; i > 0; i--)
+        {
+            PlayerMovement.Push(mMovementStack[i]);
+        }
+        mSelectedCharacter.GetComponent<Movement>().SetMovementStack(PlayerMovement);
         mMovementStack.Clear();
     }
 
+    // Checks if two tiles are adjacent
     public bool IsAdjacent(Vector3 a, Vector3 b)
     {
         float dx = Mathf.Abs(a.x - b.x);
@@ -113,9 +120,7 @@ public class CursorScript : MonoBehaviour
         foreach (Vector3 v in mMovementStack.Skip(1).Take(mMovementStack.Count - 1))
         {
             if (v == Coordinate)
-            {
                 repeatCount++;
-            }
         }
 
         // Shift our number counter over based on how many tiles are on the space
