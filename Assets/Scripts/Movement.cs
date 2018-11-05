@@ -26,6 +26,7 @@ public class Movement : MonoBehaviour {
     // Move the player through their stack
     IEnumerator MovementMachine()
     {
+        gameObject.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
         SetAnimationDirection(transform.position, mMovementStack.Peek());
         while (mMovementStack.Count != 0)
         {

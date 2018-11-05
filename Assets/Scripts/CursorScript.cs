@@ -5,17 +5,18 @@ using UnityEngine;
 
 public class CursorScript : MonoBehaviour
 {
-    public GameObject GreenTile;
+    public GameObject GreenTile; // Changes a tile's color during a planned move
     public GameObject[] TileNumbers;
 
     private Vector3Int mLastPos; // Last tile visited to highlight with the TileSelector
-    private GameObject mTileSelector;
+    private GameObject mTileSelector; // The red dude that follows the mouse around
     private MouseLocation mMouseLocation;
-    private List<GameObject> mDrawnObjects;
+    private List<GameObject> mDrawnObjects; // All of the temporary
 
     private List<Vector3> mMovementStack;
     private GameObject mSelectedCharacter;
-    private bool mHoveringCharacter = false; // Remember if we're hovering a dude
+
+    public GameObject mActionSelector;
 
     void Start()
     {
@@ -28,6 +29,12 @@ public class CursorScript : MonoBehaviour
 
     void Update()
     {
+        if (mActionSelector.GetComponent<ActionSelector>().mSelecting)
+        {
+            mTileSelector.SetActive(false);
+            return;
+        }
+
         // Move the tile selector to the mouse position
         Vector3Int MouseCellPos = mMouseLocation.GetMouseCellPosition();
         if (mLastPos != MouseCellPos)
@@ -42,6 +49,7 @@ public class CursorScript : MonoBehaviour
             }
         }
 
+        // When our cursor moves, check what units we're colliding with
         Collider2D[] mColliders;
         if ((mColliders = Physics2D.OverlapCircleAll(mMouseLocation.GetMouseWorldPosition(), 0f)).Length > 0)
         {
@@ -89,18 +97,31 @@ public class CursorScript : MonoBehaviour
             yield return null;
         }
 
-        mSelectedCharacter.GetComponent<Movement>().Lock();
         DeleteDrawnObjects();
 
-        // Clear the movement stack
+        // Give the movement stack to the player and clear it
         Stack<Vector3> PlayerMovement = new Stack<Vector3>();
         for (int i = mMovementStack.Count - 1; i > 0; i--)
         {
             PlayerMovement.Push(mMovementStack[i]);
         }
         mSelectedCharacter.GetComponent<Movement>().SetMovementStack(PlayerMovement);
-        mMovementStack.Clear();
+
+        mActionSelector.SetActive(true);
+        mActionSelector.GetComponent<ActionSelector>().mSelecting = true;
+        mActionSelector.GetComponent<ActionSelector>().mSelectedCharacter = mSelectedCharacter;
         mSelectedCharacter = null;
+        DrawMovementColors(mMovementStack);
+
+        while (mActionSelector.GetComponent<ActionSelector>().mSelecting)
+        {
+            Debug.Log("YO");
+            yield return null;
+        }
+        mMovementStack.Clear();
+
+        mActionSelector.GetComponent<ActionSelector>().mSelecting = false;
+
     }
 
     // Checks if two tiles are adjacent
@@ -158,9 +179,9 @@ public class CursorScript : MonoBehaviour
         mDrawnObjects.Add(Instantiate(GreenTile, Coordinates[0], new Quaternion()));
     }
 
+    // Cleans up all drawn objects
     void DeleteDrawnObjects()
     {
-        // Clean up the green tiles
         if (mDrawnObjects.Count > 0)
         {
             foreach (GameObject go in mDrawnObjects)

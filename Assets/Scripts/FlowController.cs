@@ -7,6 +7,7 @@ public class FlowController : MonoBehaviour {
 
     private GameObject[] FriendlyUnits;
     private GameObject[] EnemyUnits;
+    private bool planningMove = false;
 
 	// Use this for initialization
 	void Start () {

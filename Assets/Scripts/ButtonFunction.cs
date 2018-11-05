@@ -1,9 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.EventSystems;
 using UnityEngine;
 
 public class ButtonFunction : MonoBehaviour {
-
+    public GameObject mActionSelector;
 	// Use this for initialization
 	void Start () {
 		
@@ -16,6 +17,9 @@ public class ButtonFunction : MonoBehaviour {
 
     public void CLICKME()
     {
-        Debug.Log("UGUU");
+        mActionSelector.GetComponent<ActionSelector>().mAction = 1;
+        mActionSelector.GetComponent<ActionSelector>().mActionText = EventSystem.current.currentSelectedGameObject.name;
+        mActionSelector.GetComponent<ActionSelector>().DisableAll();
+        mActionSelector.SetActive(false);
     }
 }
