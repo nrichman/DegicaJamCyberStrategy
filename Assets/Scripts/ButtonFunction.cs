@@ -15,11 +15,37 @@ public class ButtonFunction : MonoBehaviour {
 		
 	}
 
-    public void CLICKME()
+    public void ActionCancel()
+    {
+
+    }
+
+    public void Action_TurnDirection()
+    {
+        mActionSelector.GetComponent<ActionSelector>().mActionText = EventSystem.current.currentSelectedGameObject.name;
+        mActionSelector.GetComponent<ActionSelector>().FinishAction();
+    }
+
+    public void Action_1()
     {
         mActionSelector.GetComponent<ActionSelector>().mAction = 1;
-        mActionSelector.GetComponent<ActionSelector>().mActionText = EventSystem.current.currentSelectedGameObject.name;
-        mActionSelector.GetComponent<ActionSelector>().DisableAll();
-        mActionSelector.SetActive(false);
+        CombinedAction();
+    }
+
+    public void Action_2()
+    {
+        mActionSelector.GetComponent<ActionSelector>().mAction = 2;
+        CombinedAction();
+    }
+
+    public void Action_3()
+    {
+        mActionSelector.GetComponent<ActionSelector>().mAction = 3;
+        CombinedAction();
+    }
+
+    private void CombinedAction()
+    {
+        mActionSelector.GetComponent<ActionSelector>().DisableActionButtons();
     }
 }

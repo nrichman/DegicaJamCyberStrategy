@@ -6,6 +6,7 @@ public class Movement : MonoBehaviour {
 
     public int Speed = 7;
     public int Step = 1;
+    public int mAction;
     Stack<Vector3> mMovementStack;
     private Animator mAnimator;
     private float mStep;

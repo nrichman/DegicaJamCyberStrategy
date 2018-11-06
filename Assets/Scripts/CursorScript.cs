@@ -16,6 +16,7 @@ public class CursorScript : MonoBehaviour
     private List<Vector3> mMovementStack;
     private GameObject mSelectedCharacter;
 
+    
     public GameObject mActionSelector;
 
     void Start()
@@ -29,7 +30,7 @@ public class CursorScript : MonoBehaviour
 
     void Update()
     {
-        if (mActionSelector.GetComponent<ActionSelector>().mSelecting)
+        if (mActionSelector.GetComponent<ActionSelector>().mPlanningAction)
         {
             mTileSelector.SetActive(false);
             return;
@@ -71,6 +72,7 @@ public class CursorScript : MonoBehaviour
                     if (collider.gameObject.GetComponent<Movement>().mLocked && mDrawnObjects.Count == 0)
                     {
                         DrawMovementColors(collider.gameObject.GetComponent<Movement>().GetMovementStack());
+                        mActionSelector.GetComponent<ActionSelector>().Hovering(true);
                     }
                 }
             }
@@ -108,19 +110,19 @@ public class CursorScript : MonoBehaviour
         mSelectedCharacter.GetComponent<Movement>().SetMovementStack(PlayerMovement);
 
         mActionSelector.SetActive(true);
-        mActionSelector.GetComponent<ActionSelector>().mSelecting = true;
+        mActionSelector.GetComponent<ActionSelector>().mPlanningAction = true;
         mActionSelector.GetComponent<ActionSelector>().mSelectedCharacter = mSelectedCharacter;
         mSelectedCharacter = null;
         DrawMovementColors(mMovementStack);
 
-        while (mActionSelector.GetComponent<ActionSelector>().mSelecting)
+        while (mActionSelector.GetComponent<ActionSelector>().mPlanningAction)
         {
             Debug.Log("YO");
             yield return null;
         }
         mMovementStack.Clear();
 
-        mActionSelector.GetComponent<ActionSelector>().mSelecting = false;
+        mActionSelector.GetComponent<ActionSelector>().mPlanningAction = false;
 
     }
 
