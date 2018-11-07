@@ -7,6 +7,7 @@ public class Movement : MonoBehaviour {
     public int Speed = 7;
     public int Step = 1;
     public int mAction;
+    public string mTurnText;
     Stack<Vector3> mMovementStack;
     private Animator mAnimator;
     private float mStep;
@@ -68,7 +69,6 @@ public class Movement : MonoBehaviour {
 
     private void SetAnimationDirection(Vector3 oldDirection, Vector3 newDirection)
     {
-        Debug.Log(oldDirection + " " + newDirection);
         // Moving on Y axis
         if (oldDirection.x == newDirection.x)
         {

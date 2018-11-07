@@ -5,10 +5,12 @@ using UnityEngine;
 
 public class ButtonFunction : MonoBehaviour {
     public GameObject mActionSelector;
+    private ActionSelector ActionSelector;
+
 	// Use this for initialization
 	void Start () {
-		
-	}
+        ActionSelector = mActionSelector.GetComponent<ActionSelector>();
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -17,35 +19,35 @@ public class ButtonFunction : MonoBehaviour {
 
     public void ActionCancel()
     {
-
+        ActionSelector.Cancel();
     }
 
     public void Action_TurnDirection()
     {
-        mActionSelector.GetComponent<ActionSelector>().mActionText = EventSystem.current.currentSelectedGameObject.name;
-        mActionSelector.GetComponent<ActionSelector>().FinishAction();
+        ActionSelector.mTurnText = EventSystem.current.currentSelectedGameObject.name;
+        ActionSelector.FinishAction();
     }
 
     public void Action_1()
     {
-        mActionSelector.GetComponent<ActionSelector>().mAction = 1;
+        ActionSelector.mAction = 1;
         CombinedAction();
     }
 
     public void Action_2()
     {
-        mActionSelector.GetComponent<ActionSelector>().mAction = 2;
+        ActionSelector.mAction = 2;
         CombinedAction();
     }
 
     public void Action_3()
     {
-        mActionSelector.GetComponent<ActionSelector>().mAction = 3;
+        ActionSelector.mAction = 3;
         CombinedAction();
     }
 
     private void CombinedAction()
     {
-        mActionSelector.GetComponent<ActionSelector>().DisableActionButtons();
+        ActionSelector.ActionSelected();
     }
 }

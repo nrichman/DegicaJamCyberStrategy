@@ -30,7 +30,9 @@ public class CursorScript : MonoBehaviour
 
     void Update()
     {
-        if (mActionSelector.GetComponent<ActionSelector>().mPlanningAction)
+        ActionSelector mActionComponent = mActionSelector.GetComponent<ActionSelector>();
+
+        if (mActionComponent.mPlanningAction)
         {
             mTileSelector.SetActive(false);
             return;
@@ -47,6 +49,7 @@ public class CursorScript : MonoBehaviour
             if (mSelectedCharacter == null)
             {
                 DeleteDrawnObjects();
+                mActionComponent.Hovering(false);
             }
         }
 
@@ -60,7 +63,7 @@ public class CursorScript : MonoBehaviour
                 if (collider.tag == "FriendlyUnit")
                 {
                     // New command to move a unit
-                    if (Input.GetMouseButtonDown(0))
+                    if (Input.GetMouseButtonDown(0) && !collider.GetComponent<Movement>().mLocked)
                     {
                         mSelectedCharacter = collider.gameObject;
                         mDrawnObjects.Add(Instantiate(GreenTile, MouseCellPos, new Quaternion()));
@@ -72,7 +75,9 @@ public class CursorScript : MonoBehaviour
                     if (collider.gameObject.GetComponent<Movement>().mLocked && mDrawnObjects.Count == 0)
                     {
                         DrawMovementColors(collider.gameObject.GetComponent<Movement>().GetMovementStack());
-                        mActionSelector.GetComponent<ActionSelector>().Hovering(true);
+                        mActionComponent.mAction = collider.gameObject.GetComponent<Movement>().mAction;
+                        mActionComponent.mTurnText = collider.gameObject.GetComponent<Movement>().mTurnText;
+                        mActionComponent.Hovering(true);
                     }
                 }
             }
@@ -117,7 +122,6 @@ public class CursorScript : MonoBehaviour
 
         while (mActionSelector.GetComponent<ActionSelector>().mPlanningAction)
         {
-            Debug.Log("YO");
             yield return null;
         }
         mMovementStack.Clear();

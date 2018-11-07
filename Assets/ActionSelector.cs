@@ -7,21 +7,11 @@ public class ActionSelector : MonoBehaviour {
 
     public bool mPlanningAction = false;
     public int mAction;
-    public string mActionText;
+    public string mTurnText;
     public GameObject mSelectedCharacter;
     public GameObject mTurnSelector;
 
-    public void DisableActionButtons()
-    {
-        // Set the character's action to the selected button
-        mSelectedCharacter.GetComponent<Movement>().mAction = mAction;
-
-        ShowActionButtons();
-
-        // Toggle the turn selector on
-        mTurnSelector.SetActive(true);
-    }
-
+    // Shows the action buttons when hovering
     public void ShowActionButtons()
     {
         // Iterate through children. Top 3 are action buttons, fourth is cancel button
@@ -30,6 +20,13 @@ public class ActionSelector : MonoBehaviour {
         int ChildNum = 0;
         foreach (Transform child in transform)
         {
+            // Hide the cancel button
+            if (ChildNum == 3)
+            {
+                if (mSelectedCharacter.GetComponent<Movement>().mTurnText != "")
+                    child.gameObject.SetActive(false);
+                break;
+            }
             Selectable childButton = child.GetComponent<Selectable>();
             ChildNum++;
             childButton.interactable = false;
@@ -37,14 +34,65 @@ public class ActionSelector : MonoBehaviour {
                 ColorSelected(childButton);
             else
                 ColorNotSelected(childButton);
-
-            if (ChildNum > 2)
-                break;
         }
+    }
+
+    // Shows the turn buttons when hovering
+    public void ShowTurnButtons()
+    {
+        mTurnSelector.SetActive(true);
+        int ChildNum = -1;
+        foreach (Transform child in mTurnSelector.gameObject.transform)
+        {
+            ChildNum++;
+            if (ChildNum == 0)
+                continue;
+            Selectable childButton = child.GetComponent<Selectable>();
+            childButton.interactable = false;
+            if (child.name == mTurnText)
+                ColorSelected(childButton);
+            else
+                ColorNotSelected(childButton);
+        }
+    }
+
+    // Changes all of the action buttons and turn buttons back to their interactable state
+    public void ResetActionButtons()
+    {
+        foreach (Transform child in transform)
+        {
+            if (child.GetComponent<Selectable>() != null)
+            {
+                child.gameObject.SetActive(true);
+                Selectable childButton = child.GetComponent<Selectable>();
+                childButton.interactable = true;
+            }
+        }
+
+        foreach (Transform child in mTurnSelector.gameObject.transform)
+        {
+            if (child.GetComponent<Selectable>() != null)
+            {
+                Selectable childButton = child.GetComponent<Selectable>();
+                childButton.interactable = true;
+            }
+        }
+    }
+
+    // An action was selected, show the action buttons and toggle the turn selector
+    public void ActionSelected()
+    {
+        // Set the character's action to the selected button
+        ShowActionButtons();
+        // Toggle the turn selector on
+        mTurnSelector.SetActive(true);
     }
 
     public void FinishAction()
     {
+        mSelectedCharacter.GetComponent<Movement>().mAction = mAction;
+        mSelectedCharacter.GetComponent<Movement>().mTurnText = mTurnText;
+        ResetActionButtons();
         HideActionButtons();
         mSelectedCharacter.GetComponent<Movement>().Lock();
         mPlanningAction = false;
@@ -55,6 +103,14 @@ public class ActionSelector : MonoBehaviour {
         if (Toggle)
         {
             gameObject.SetActive(true);
+            ShowActionButtons();
+            ShowTurnButtons();
+        }
+        else
+        {
+            ResetActionButtons();
+            mTurnSelector.gameObject.SetActive(false);
+            gameObject.SetActive(false);
         }
     }
 
@@ -77,8 +133,15 @@ public class ActionSelector : MonoBehaviour {
         child.colors = cb;
     }
 
-    void ResetColor (Selectable child)
+    public void Cancel()
     {
-
+        Movement Character = mSelectedCharacter.GetComponent<Movement>();
+        Character.SetMovementStack(new Stack<Vector3>());
+        Character.mTurnText = "";
+        Character.mAction = -1;
+        ResetActionButtons();
+        HideActionButtons();
+        mSelectedCharacter = null;
+        mPlanningAction = false;
     }
 }
