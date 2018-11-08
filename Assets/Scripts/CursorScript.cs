@@ -16,8 +16,9 @@ public class CursorScript : MonoBehaviour
     private List<Vector3> mMovementStack;
     private GameObject mSelectedCharacter;
 
-    
+    private GameObject mFlowController;
     public GameObject mActionSelector;
+    private ActionSelector mActionComponent;
 
     void Start()
     {
@@ -26,17 +27,20 @@ public class CursorScript : MonoBehaviour
         mMouseLocation = transform.parent.gameObject.GetComponent<MouseLocation>();
         mDrawnObjects = new List<GameObject>();
         mMovementStack = new List<Vector3>();
+        mFlowController = GameObject.Find("FlowController");
+        mActionComponent = mActionSelector.GetComponent<ActionSelector>();
     }
 
     void Update()
     {
-        ActionSelector mActionComponent = mActionSelector.GetComponent<ActionSelector>();
-
-        if (mActionComponent.mPlanningAction)
+        // If we're planning an action or the movement stage is happening, return
+        if (mActionComponent.mPlanningAction || mFlowController.GetComponent<FlowController>().mInMotion)
         {
             mTileSelector.SetActive(false);
             return;
         }
+
+        mTileSelector.SetActive(true);
 
         // Move the tile selector to the mouse position
         Vector3Int MouseCellPos = mMouseLocation.GetMouseCellPosition();
@@ -115,18 +119,18 @@ public class CursorScript : MonoBehaviour
         mSelectedCharacter.GetComponent<Movement>().SetMovementStack(PlayerMovement);
 
         mActionSelector.SetActive(true);
-        mActionSelector.GetComponent<ActionSelector>().mPlanningAction = true;
-        mActionSelector.GetComponent<ActionSelector>().mSelectedCharacter = mSelectedCharacter;
+        mActionComponent.mPlanningAction = true;
+        mActionComponent.mSelectedCharacter = mSelectedCharacter;
         mSelectedCharacter = null;
         DrawMovementColors(mMovementStack);
 
-        while (mActionSelector.GetComponent<ActionSelector>().mPlanningAction)
+        while (mActionComponent.mPlanningAction)
         {
             yield return null;
         }
         mMovementStack.Clear();
 
-        mActionSelector.GetComponent<ActionSelector>().mPlanningAction = false;
+        mActionComponent.mPlanningAction = false;
 
     }
 

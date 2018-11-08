@@ -6,13 +6,16 @@ public class Movement : MonoBehaviour {
 
     public int Speed = 7;
     public int Step = 1;
-    public int mAction;
-    public string mTurnText;
+
+    [HideInInspector] public int mAction = -1;
+    [HideInInspector] public string mTurnText = "";
     Stack<Vector3> mMovementStack;
+
     private Animator mAnimator;
     private float mStep;
 
-    public bool mLocked = false;
+    [HideInInspector] public bool mLocked = false;
+    [HideInInspector] public bool mInMotion = false;
 
 	void Start ()
     {
@@ -29,9 +32,9 @@ public class Movement : MonoBehaviour {
     IEnumerator MovementMachine()
     {
         gameObject.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
-        SetAnimationDirection(transform.position, mMovementStack.Peek());
         while (mMovementStack.Count != 0)
         {
+            SetAnimationDirection(transform.position, mMovementStack.Peek());
             transform.position = Vector3.MoveTowards(transform.position, mMovementStack.Peek(), Step * Time.deltaTime);
             if (transform.position == mMovementStack.Peek())
             {
@@ -41,6 +44,8 @@ public class Movement : MonoBehaviour {
             }
             yield return null;
         }
+        TurnPlayer();
+        Unlock();
     }
 
     public void SetMovementStack(Stack<Vector3> MovementStack)
@@ -87,6 +92,29 @@ public class Movement : MonoBehaviour {
         }
     }
 
+    // Turns the player when they finish their movement action
+    int TurnPlayer()
+    {
+        switch (mTurnText)
+        {
+            case "Up":
+                SetAnimationDirection(new Vector3(0, 0, 0), new Vector3(0, 1, 0));
+                break;
+            case "Down":
+                SetAnimationDirection(new Vector3(0, 1, 0), new Vector3(0, 0, 0));
+                break;
+            case "Left":
+                SetAnimationDirection(new Vector3(1, 0, 0), new Vector3(0, 0, 0));
+                break;
+            case "Right":
+                SetAnimationDirection(new Vector3(0, 0, 0), new Vector3(1, 0, 0));
+                break;
+            default:
+                break;
+        }
+        return 1;
+    }
+
     public void Lock()
     {
         mLocked = true;
@@ -95,7 +123,11 @@ public class Movement : MonoBehaviour {
 
     public void Unlock()
     {
+        mAction = -1;
+        mTurnText = "";
+        mMovementStack = new Stack<Vector3>();
         mLocked = false;
+        mInMotion = false;
     }
 }
 

@@ -5,11 +5,11 @@ using UnityEngine;
 
 public class ActionSelector : MonoBehaviour {
 
-    public bool mPlanningAction = false;
-    public int mAction;
-    public string mTurnText;
-    public GameObject mSelectedCharacter;
-    public GameObject mTurnSelector;
+    [HideInInspector] public bool mPlanningAction = false;
+    [HideInInspector] public int mAction;
+    [HideInInspector] public string mTurnText;
+    [HideInInspector] public GameObject mSelectedCharacter;
+    [HideInInspector] public GameObject mTurnSelector;
 
     // Shows the action buttons when hovering
     public void ShowActionButtons()
