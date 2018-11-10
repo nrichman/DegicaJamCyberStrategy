@@ -73,7 +73,6 @@ public class CursorScript : MonoBehaviour
                     // New command to move a unit
                     if (Input.GetMouseButtonDown(0) && !collider.GetComponent<Movement>().mLocked)
                     {
-                        CenterCameraOnCharacter(collider.transform.position);
                         mSelectedCharacter = collider.gameObject;
                         mDrawnObjects.Add(Instantiate(GreenTile, MouseCellPos, new Quaternion()));
                         mMovementStack.Add(MouseCellPos);
