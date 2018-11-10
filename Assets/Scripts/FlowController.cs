@@ -5,7 +5,6 @@ using UnityEngine;
 public class FlowController : MonoBehaviour {
     private GameObject[] mFriendlyUnits;
     private GameObject[] mEnemyUnits;
-    private bool mPlanningMove = false;
     private GameObject mCanvas;
 
     public GameObject mActionSelector;

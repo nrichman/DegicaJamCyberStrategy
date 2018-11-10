@@ -16,7 +16,6 @@ public class ActionSelector : MonoBehaviour {
     {
         // Iterate through children. Top 3 are action buttons, fourth is cancel button
         // Need to disable all of the actions and highlight the selected action
-        int Action = mSelectedCharacter.GetComponent<Movement>().mAction;
         int ChildNum = 0;
         foreach (Transform child in transform)
         {

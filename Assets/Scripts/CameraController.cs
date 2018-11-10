@@ -8,42 +8,52 @@ public class CameraController : MonoBehaviour {
     private int theScreenWidth;
     private int theScreenHeight;
     private Tilemap mTilemap;
-    private MouseLocation mMouseLocation;
     private float mTilemapHeight;
     private float mTilemapWidth;
     private Camera mCamera;
+    private FlowController mFlowController;
 
-    private int mSpeed = 10; // Speed the camera pans at
-    private int mScaleSpeed = 10; // Speed the camera zooms in and out at
+    private float mSpeed = 10; // Speed the camera pans at
+    private int mScaleSpeed = 100; // Speed the camera manually zooms in and out at
+    private int mAutoScaleSpeed = 1; // Speed the camera automatically zooms in and out at
+    private int mMinSize = 3;
 
 	void Start ()
     {
         theScreenHeight = Screen.height;
         theScreenWidth = Screen.width;
         mTilemap = GameObject.Find("BaseLayer").GetComponent<Tilemap>();
-        mMouseLocation = GameObject.Find("MouseUI").GetComponent<MouseLocation>();
         mCamera = GetComponent<Camera>();
+        mFlowController = GameObject.Find("FlowController").GetComponent<FlowController>();
+        mTilemapHeight = mTilemap.size.y / 2 - mCamera.orthographicSize;
+        mTilemapWidth = mTilemap.size.x / 2 - (mCamera.orthographicSize * mCamera.aspect);
         StartCoroutine(GameplayCameraController());
+    }
+
+    void Update()
+    {
+        mTilemapHeight = mTilemap.size.y / 2 - mCamera.orthographicSize;
+        mTilemapWidth = mTilemap.size.x / 2 - (mCamera.orthographicSize * mCamera.aspect);
+
+        if (mCamera.orthographicSize % 1 == 0)
+            mCamera.orthographicSize -= .01f;
     }
 
     IEnumerator GameplayCameraController()
     {
-        while (true)
+        while (!mFlowController.mInMotion)
         {
-            mTilemapHeight = mTilemap.size.y / 2 - mCamera.orthographicSize;
-            mTilemapWidth = mTilemap.size.x / 2 - (mCamera.orthographicSize * mCamera.aspect);
-
             Vector3 Position = transform.position;
 
             // Pan the camera to the mouse
             if (Input.mousePosition.x > theScreenWidth - Boundary && Position.x < mTilemapWidth)
-                Position.x += mSpeed * Time.deltaTime;
+                Position.x += mSpeed * Time.smoothDeltaTime;
             if (Input.mousePosition.x < 0 + Boundary && Position.x > -mTilemapWidth)
-                Position.x -= mSpeed * Time.deltaTime;
+                Position.x -= mSpeed * Time.smoothDeltaTime;
             if (Input.mousePosition.y > theScreenHeight - Boundary && Position.y < mTilemapHeight)
-                Position.y += mSpeed * Time.deltaTime;
+                Position.y += mSpeed * Time.smoothDeltaTime;
             if (Input.mousePosition.y < 0 + Boundary && Position.y > -mTilemapHeight)
-                Position.y -= mSpeed * Time.deltaTime;
+                Position.y -= mSpeed * Time.smoothDeltaTime;
 
             // Keep the camera within bounds
             if (Position.x < -mTilemapWidth)
@@ -56,10 +66,10 @@ public class CameraController : MonoBehaviour {
                 Position.y = mTilemapHeight;
 
             mCamera.orthographicSize -= Input.mouseScrollDelta.y * Time.deltaTime * mScaleSpeed;
+
             if (mTilemapHeight < 0)
             {
-                mTilemapHeight = 0;
-                mCamera.orthographicSize = mTilemap.size.y / 2;
+                mCamera.orthographicSize = mTilemap.size.y / 2 - 0.01f;
             }
 
             if (mTilemapWidth < 0)
@@ -67,8 +77,46 @@ public class CameraController : MonoBehaviour {
                 Position.x = 0;
             }
 
+            if (mCamera.orthographicSize < mMinSize)
+            {
+                mCamera.orthographicSize = mMinSize;
+            }
 
             transform.position = Position;
+            yield return null;
+        }
+        StartCoroutine(GameplayZoomOut());
+    }
+
+    // Zoom out to show the entire gameplay screen
+    IEnumerator GameplayZoomOut()
+    {
+        Vector3 Position = transform.position;
+
+        while (mTilemapHeight > 0)
+        {
+            mCamera.orthographicSize += Time.deltaTime * mScaleSpeed;
+            yield return null;
+        }
+
+        if (mTilemapHeight < 0)
+            mCamera.orthographicSize = mTilemap.size.y / 2;
+
+        Position.x = 0;
+        Position.y = 0;
+        transform.position = Position;
+    }
+
+
+    // Zoom out to show the entire gameplay screen
+    IEnumerator ZoomToCharacter(Vector3 CharacterPos)
+    {
+        while (transform.position != CharacterPos)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, CharacterPos, Time.deltaTime * 5);
+
+            if (mCamera.orthographicSize > 3)
+                mCamera.orthographicSize -= Time.deltaTime * mAutoScaleSpeed;
             yield return null;
         }
     }

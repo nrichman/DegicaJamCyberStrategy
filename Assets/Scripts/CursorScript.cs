@@ -19,7 +19,6 @@ public class CursorScript : MonoBehaviour
     private GameObject mFlowController;
     public GameObject mActionSelector;
     private ActionSelector mActionComponent;
-    private GameObject mCamera;
 
     void Start()
     {
@@ -30,8 +29,6 @@ public class CursorScript : MonoBehaviour
         mMovementStack = new List<Vector3>();
         mFlowController = GameObject.Find("FlowController");
         mActionComponent = mActionSelector.GetComponent<ActionSelector>();
-        mCamera = GameObject.Find("Main Camera");
-
     }
 
     void Update()
@@ -204,14 +201,5 @@ public class CursorScript : MonoBehaviour
             }
             mDrawnObjects.Clear();
         }
-    }
-
-    // When a friendly character is clicked, we want to center our camera on them
-    void CenterCameraOnCharacter(Vector3 CharacterPos)
-    {
-        Vector3 CameraPos = mCamera.transform.position;
-        CameraPos = CharacterPos;
-        CameraPos.z = -10;
-        mCamera.transform.position = CameraPos;
     }
 }
