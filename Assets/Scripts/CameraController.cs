@@ -31,29 +31,21 @@ public class CameraController : MonoBehaviour {
         while (true)
         {
             mTilemapHeight = mTilemap.size.y / 2 - mCamera.orthographicSize;
-            mTilemapWidth = mTilemap.size.x / 2 - 9;
+            mTilemapWidth = mTilemap.size.x / 2 - (mCamera.orthographicSize * mCamera.aspect);
+
             Vector3 Position = transform.position;
+
+            // Pan the camera to the mouse
             if (Input.mousePosition.x > theScreenWidth - Boundary && Position.x < mTilemapWidth)
-            {
                 Position.x += mSpeed * Time.deltaTime;
-            }
-
             if (Input.mousePosition.x < 0 + Boundary && Position.x > -mTilemapWidth)
-            {
                 Position.x -= mSpeed * Time.deltaTime;
-            }
-
             if (Input.mousePosition.y > theScreenHeight - Boundary && Position.y < mTilemapHeight)
-            {
                 Position.y += mSpeed * Time.deltaTime;
-            }
-
             if (Input.mousePosition.y < 0 + Boundary && Position.y > -mTilemapHeight)
-            {
                 Position.y -= mSpeed * Time.deltaTime;
-            }
 
-
+            // Keep the camera within bounds
             if (Position.x < -mTilemapWidth)
                 Position.x = -mTilemapWidth;
             if (Position.x > mTilemapWidth)
@@ -68,6 +60,11 @@ public class CameraController : MonoBehaviour {
             {
                 mTilemapHeight = 0;
                 mCamera.orthographicSize = mTilemap.size.y / 2;
+            }
+
+            if (mTilemapWidth < 0)
+            {
+                Position.x = 0;
             }
 
 
