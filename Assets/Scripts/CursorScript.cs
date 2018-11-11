@@ -132,7 +132,6 @@ public class CursorScript : MonoBehaviour
         mMovementStack.Clear();
 
         mActionComponent.mPlanningAction = false;
-
     }
 
     // Checks if two tiles are adjacent

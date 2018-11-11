@@ -14,7 +14,7 @@ public class CameraController : MonoBehaviour {
     private FlowController mFlowController;
 
     private float mSpeed = 10; // Speed the camera pans at
-    private int mScaleSpeed = 100; // Speed the camera manually zooms in and out at
+    private int mScaleSpeed = 50; // Speed the camera manually zooms in and out at
     private int mAutoScaleSpeed = 1; // Speed the camera automatically zooms in and out at
     private int mMinSize = 3;
 
@@ -95,7 +95,7 @@ public class CameraController : MonoBehaviour {
 
         while (mTilemapHeight > 0)
         {
-            mCamera.orthographicSize += Time.deltaTime * mScaleSpeed;
+            mCamera.orthographicSize += Time.deltaTime * 5;
             yield return null;
         }
 
@@ -119,5 +119,10 @@ public class CameraController : MonoBehaviour {
                 mCamera.orthographicSize -= Time.deltaTime * mAutoScaleSpeed;
             yield return null;
         }
+    }
+
+    public void StartGameplayCamera()
+    {
+        StartCoroutine(GameplayCameraController());
     }
 }

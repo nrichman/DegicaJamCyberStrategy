@@ -14,10 +14,11 @@ public class Movement : MonoBehaviour {
     private Animator mAnimator;
     private float mStep;
 
-    [HideInInspector] public bool mLocked = false;
+    [HideInInspector] public bool mLocked = false; // A locked character can't be moved
     [HideInInspector] public bool mInMotion = false;
+    [HideInInspector] public bool mPause = false; // Pause movement while in battle
 
-	void Start ()
+	void Awake ()
     {
         mMovementStack = new Stack<Vector3>();
         mAnimator = GetComponent<Animator>();
@@ -31,9 +32,16 @@ public class Movement : MonoBehaviour {
     // Move the player through their stack
     IEnumerator MovementMachine()
     {
-        gameObject.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
         while (mMovementStack.Count != 0)
         {
+            Debug.Log(mPause);
+            if (mPause)
+            {
+                Debug.Log("PAUSE BOYS");
+                yield return null;
+                continue;
+            }
+            Debug.Log("STUCK?");
             SetAnimationDirection(transform.position, mMovementStack.Peek());
             transform.position = Vector3.MoveTowards(transform.position, mMovementStack.Peek(), Step * Time.deltaTime);
             if (transform.position == mMovementStack.Peek())
@@ -69,6 +77,7 @@ public class Movement : MonoBehaviour {
 
     public void StartMovement()
     {
+        gameObject.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
         StartCoroutine(MovementMachine());
     }
 
@@ -128,6 +137,18 @@ public class Movement : MonoBehaviour {
         mMovementStack = new Stack<Vector3>();
         mLocked = false;
         mInMotion = false;
+    }
+
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        GameObject.Find("FlowController").GetComponent<FlowController>().SleepAll();
+        Debug.Log("?");
+        mPause = true;
+    }
+
+    IEnumerator PlayCombatAnimation ()
+    {
+        yield return null;
     }
 }
 
