@@ -20,6 +20,7 @@ public class FlowController : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {        
+        // When played is pressed, set everything into motion
    		if (Input.GetKeyDown("space") &&
             !mActionSelector.GetComponent<ActionSelector>().mPlanningAction &&
             !CheckMoving() &&
@@ -27,11 +28,13 @@ public class FlowController : MonoBehaviour {
 
             mInMotion = true;
 
+            // Need to loop through all units and start their motions
             foreach (GameObject FriendlyUnit in mFriendlyUnits)
             {
                 Movement FriendlyUnitMovement = FriendlyUnit.GetComponent<Movement>();
                 FriendlyUnitMovement.mInMotion = true;
                 FriendlyUnitMovement.StartMovement();
+                FriendlyUnit.GetComponent<BoxCollider2D>().size = new Vector2(.5f, .5f);
             }
 
             foreach (GameObject EnemyUnit in mEnemyUnits)
@@ -39,8 +42,9 @@ public class FlowController : MonoBehaviour {
                 Movement EnemyUnitMovement = EnemyUnit.GetComponent<Movement>();
                 EnemyUnitMovement.mInMotion = true;
                 EnemyUnitMovement.StartMovement();
+                EnemyUnit.GetComponent<BoxCollider2D>().size = new Vector2(.5f, .5f);
             }
- 
+
             StartCoroutine(RunSequence());
         }
     }
@@ -54,16 +58,31 @@ public class FlowController : MonoBehaviour {
         mCanvas.SetActive(true);
         mInMotion = false;
         mCamera.StartGameplayCamera();
+
+        // Fix hitboxes for player clicks
+        foreach (GameObject FriendlyUnit in mFriendlyUnits)
+            FriendlyUnit.GetComponent<BoxCollider2D>().size = new Vector2(.95f, .95f);
+
+        foreach (GameObject EnemyUnit in mEnemyUnits)
+            EnemyUnit.GetComponent<BoxCollider2D>().size = new Vector2(.95f, .95f);
     }
 
+    // Check to see if all of our units have finished their movement phases
     bool CheckMoving()
     {
         foreach (GameObject Unit in mFriendlyUnits){
+            // Unit may have died here
+            if (Unit == null)
+                continue;
             if (Unit.GetComponent<Movement>().mInMotion)
                 return true;
         }
+
         foreach (GameObject Unit in mEnemyUnits)
         {
+            // Unit may have died here
+            if (Unit == null)
+                continue;
             if (Unit.GetComponent<Movement>().mInMotion)
                 return true;
         }
@@ -74,13 +93,25 @@ public class FlowController : MonoBehaviour {
     public void SleepAll ()
     {
         foreach (GameObject FriendlyUnit in mFriendlyUnits)
-        {
             FriendlyUnit.GetComponent<Movement>().mPause = true;
-        }
 
         foreach (GameObject EnemyUnit in mEnemyUnits)
-        {
             EnemyUnit.GetComponent<Movement>().mPause = true;
-        }
+    }
+
+    // Puts all units to sleep when a battle occurs
+    public void WakeAll ()
+    {
+        foreach (GameObject FriendlyUnit in mFriendlyUnits)
+            FriendlyUnit.GetComponent<Movement>().mPause = false;
+
+        foreach (GameObject EnemyUnit in mEnemyUnits)
+            EnemyUnit.GetComponent<Movement>().mPause = false ;
+    }
+
+    // Handles combat interactions
+    public void InitiateCombat (Vector3 PlayerPos)
+    {
+        mCamera.StartZoomToCharacter(PlayerPos);
     }
 }

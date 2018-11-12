@@ -9,14 +9,10 @@ public class EnemyController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         mEnemyMovements = new List<Movement>();
-
-        Stack<Vector3> aaaa = new Stack<Vector3>();
-        aaaa.Push(new Vector3(1, 0, 0));
-        aaaa.Push(new Vector3(2, 0, 0));
-
         foreach (Transform child in transform)
         {
-            child.GetComponent<Movement>().SetMovementStack(aaaa);
+            child.GetComponent<Movement>().SetMovementStack(new Stack<Vector3>());
+            child.GetComponent<Movement>().mMovementStack.Push(new Vector3(1, 0, 0));
         }
     }
 	

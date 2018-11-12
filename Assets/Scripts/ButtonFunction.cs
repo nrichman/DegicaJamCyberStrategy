@@ -7,7 +7,7 @@ public class ButtonFunction : MonoBehaviour {
     public GameObject mActionSelector;
     private ActionSelector ActionSelector;
 
-	// Use this for initialization
+	//   Use this for initialization
 	void Start () {
         ActionSelector = mActionSelector.GetComponent<ActionSelector>();
     }

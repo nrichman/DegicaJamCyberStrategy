@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Movement : MonoBehaviour {
+    [HideInInspector] public CharacterStats mCharacterStats;
 
-    public int Speed = 7;
     public int Step = 1;
-
+    private int i = 0;
     [HideInInspector] public int mAction = -1;
     [HideInInspector] public string mTurnText = "";
-    Stack<Vector3> mMovementStack;
+    public Stack<Vector3> mMovementStack; // Stack of movements the player must make
+    Vector3 mLastMovement;
 
     private Animator mAnimator;
     private float mStep;
@@ -20,6 +21,7 @@ public class Movement : MonoBehaviour {
 
 	void Awake ()
     {
+        mCharacterStats = GetComponent<CharacterStats>();
         mMovementStack = new Stack<Vector3>();
         mAnimator = GetComponent<Animator>();
     }
@@ -32,20 +34,20 @@ public class Movement : MonoBehaviour {
     // Move the player through their stack
     IEnumerator MovementMachine()
     {
+        GetComponent<SpriteRenderer>().sortingOrder = -1 * (int) transform.position.y;
+        mLastMovement = transform.position;
         while (mMovementStack.Count != 0)
         {
-            Debug.Log(mPause);
             if (mPause)
             {
-                Debug.Log("PAUSE BOYS");
                 yield return null;
                 continue;
             }
-            Debug.Log("STUCK?");
             SetAnimationDirection(transform.position, mMovementStack.Peek());
             transform.position = Vector3.MoveTowards(transform.position, mMovementStack.Peek(), Step * Time.deltaTime);
             if (transform.position == mMovementStack.Peek())
             {
+                mLastMovement = transform.position;
                 mMovementStack.Pop();
                 if (mMovementStack.Count > 0)
                     SetAnimationDirection(transform.position, mMovementStack.Peek());
@@ -142,13 +144,63 @@ public class Movement : MonoBehaviour {
     void OnTriggerEnter2D(Collider2D collision)
     {
         GameObject.Find("FlowController").GetComponent<FlowController>().SleepAll();
-        Debug.Log("?");
-        mPause = true;
+
+        // Note: need some way for multi battles
+
+
+        // Units are on opposite teams
+        if (transform.tag != collision.tag)
+        {
+            // Check the friendly character's collision, important that we only do one battle!
+            if (transform.tag == "FriendlyUnit")
+            {
+                Debug.Log("A");
+                StartCoroutine(PlayCombatAnimation(transform, collision.transform));
+            }
+            GameObject.Find("FlowController").GetComponent<FlowController>().InitiateCombat(transform.position);
+            Debug.Log(collision.transform.name);
+        }
+        else
+        {
+            GameObject.Find("FlowController").GetComponent<FlowController>().WakeAll();
+            PushBack();
+        }
     }
 
-    IEnumerator PlayCombatAnimation ()
+    IEnumerator PlayCombatAnimation (Transform Friendly, Transform Enemy)
     {
-        yield return null;
+        GameObject.Find("FlowController").GetComponent<FlowController>().InitiateCombat(transform.position);
+
+        CharacterStats FriendlyStats = Friendly.GetComponent<CharacterStats>();
+        CharacterStats EnemyStats = Enemy.GetComponent<CharacterStats>();
+
+        while (true)
+        {
+            int EnemyDamage = FriendlyStats.AttackDamage - EnemyStats.Defense;
+            int FriendlyDamage = EnemyStats.AttackDamage - FriendlyStats.Defense;
+
+            if (FriendlyDamage > 0)
+                FriendlyStats.MaxHealth -= FriendlyDamage;
+            if (EnemyDamage > 0)
+                EnemyStats.MaxHealth -= EnemyDamage;
+
+            if (EnemyStats.MaxHealth <= 0)
+            {
+                Destroy(Enemy.gameObject);
+                break;
+            }
+            if (FriendlyStats.MaxHealth <= 0)
+                Destroy(Friendly.gameObject);
+            yield return null;
+        }
+        GameObject.Find("FlowController").GetComponent<FlowController>().WakeAll();
+    }
+
+    // Moves a unit back to the space it came from
+    public void PushBack ()
+    {
+        mMovementStack.Clear();
+        mMovementStack.Push(mLastMovement);
     }
 }
 

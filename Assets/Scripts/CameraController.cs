@@ -15,7 +15,7 @@ public class CameraController : MonoBehaviour {
 
     private float mSpeed = 10; // Speed the camera pans at
     private int mScaleSpeed = 50; // Speed the camera manually zooms in and out at
-    private int mAutoScaleSpeed = 1; // Speed the camera automatically zooms in and out at
+    private int mAutoScaleSpeed = 50; // Speed the camera automatically zooms in and out at
     private int mMinSize = 3;
 
 	void Start ()
@@ -44,6 +44,16 @@ public class CameraController : MonoBehaviour {
         while (!mFlowController.mInMotion)
         {
             Vector3 Position = transform.position;
+
+            // Key events to pan the camera
+            if (Input.GetKey("w"))
+                Position.y += mSpeed * Time.smoothDeltaTime;
+            if (Input.GetKey("a"))
+                Position.x -= mSpeed * Time.smoothDeltaTime;
+            if (Input.GetKey("s"))
+                Position.y -= mSpeed * Time.smoothDeltaTime;
+            if (Input.GetKey("d"))
+                Position.x += mSpeed * Time.smoothDeltaTime;
 
             // Pan the camera to the mouse
             if (Input.mousePosition.x > theScreenWidth - Boundary && Position.x < mTilemapWidth)
@@ -95,7 +105,8 @@ public class CameraController : MonoBehaviour {
 
         while (mTilemapHeight > 0)
         {
-            mCamera.orthographicSize += Time.deltaTime * 5;
+            transform.position = Vector3.MoveTowards(transform.position, new Vector3(0,0,-10), Time.deltaTime * mAutoScaleSpeed * 2);
+            mCamera.orthographicSize += Time.deltaTime * mAutoScaleSpeed;
             yield return null;
         }
 
@@ -108,9 +119,10 @@ public class CameraController : MonoBehaviour {
     }
 
 
-    // Zoom out to show the entire gameplay screen
+    // Zoom in to show character combat
     IEnumerator ZoomToCharacter(Vector3 CharacterPos)
     {
+        CharacterPos.z = -10;
         while (transform.position != CharacterPos)
         {
             transform.position = Vector3.MoveTowards(transform.position, CharacterPos, Time.deltaTime * 5);
@@ -124,5 +136,10 @@ public class CameraController : MonoBehaviour {
     public void StartGameplayCamera()
     {
         StartCoroutine(GameplayCameraController());
+    }
+
+    public void StartZoomToCharacter(Vector3 CharacterPos)
+    {
+        StartCoroutine(ZoomToCharacter(CharacterPos));
     }
 }
