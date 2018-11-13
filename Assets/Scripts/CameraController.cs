@@ -125,6 +125,8 @@ public class CameraController : MonoBehaviour {
         CharacterPos.z = -10;
         while (transform.position != CharacterPos)
         {
+            Debug.Log(transform.position);
+            Debug.Log(CharacterPos);
             transform.position = Vector3.MoveTowards(transform.position, CharacterPos, Time.deltaTime * 5);
 
             if (mCamera.orthographicSize > 3)

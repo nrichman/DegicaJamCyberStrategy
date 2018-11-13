@@ -61,10 +61,16 @@ public class FlowController : MonoBehaviour {
 
         // Fix hitboxes for player clicks
         foreach (GameObject FriendlyUnit in mFriendlyUnits)
-            FriendlyUnit.GetComponent<BoxCollider2D>().size = new Vector2(.95f, .95f);
+        {
+            if (FriendlyUnit != null)
+                FriendlyUnit.GetComponent<BoxCollider2D>().size = new Vector2(.95f, .95f);
+        }
 
         foreach (GameObject EnemyUnit in mEnemyUnits)
-            EnemyUnit.GetComponent<BoxCollider2D>().size = new Vector2(.95f, .95f);
+        {
+            if (EnemyUnit != null)
+                EnemyUnit.GetComponent<BoxCollider2D>().size = new Vector2(.95f, .95f);
+        }
     }
 
     // Check to see if all of our units have finished their movement phases
@@ -103,10 +109,15 @@ public class FlowController : MonoBehaviour {
     public void WakeAll ()
     {
         foreach (GameObject FriendlyUnit in mFriendlyUnits)
+        {
+            Debug.Log(FriendlyUnit.transform.name);
             FriendlyUnit.GetComponent<Movement>().mPause = false;
+        }
 
         foreach (GameObject EnemyUnit in mEnemyUnits)
-            EnemyUnit.GetComponent<Movement>().mPause = false ;
+        {
+            EnemyUnit.GetComponent<Movement>().mPause = false;
+        }
     }
 
     // Handles combat interactions

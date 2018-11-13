@@ -17,7 +17,7 @@ public class Movement : MonoBehaviour {
 
     [HideInInspector] public bool mLocked = false; // A locked character can't be moved
     [HideInInspector] public bool mInMotion = false;
-    [HideInInspector] public bool mPause = false; // Pause movement while in battle
+    public bool mPause = false; // Pause movement while in battle
 
 	void Awake ()
     {
@@ -145,55 +145,51 @@ public class Movement : MonoBehaviour {
     {
         GameObject.Find("FlowController").GetComponent<FlowController>().SleepAll();
 
-        // Note: need some way for multi battles
-
-
         // Units are on opposite teams
         if (transform.tag != collision.tag)
         {
             // Check the friendly character's collision, important that we only do one battle!
             if (transform.tag == "FriendlyUnit")
             {
-                Debug.Log("A");
-                StartCoroutine(PlayCombatAnimation(transform, collision.transform));
+               DealCombatDamage(transform, collision.transform);
             }
-            GameObject.Find("FlowController").GetComponent<FlowController>().InitiateCombat(transform.position);
-            Debug.Log(collision.transform.name);
         }
         else
         {
-            GameObject.Find("FlowController").GetComponent<FlowController>().WakeAll();
             PushBack();
         }
+
+        GameObject.Find("FlowController").GetComponent<FlowController>().WakeAll();
     }
 
-    IEnumerator PlayCombatAnimation (Transform Friendly, Transform Enemy)
+    void DealCombatDamage (Transform Friendly, Transform Enemy)
     {
         GameObject.Find("FlowController").GetComponent<FlowController>().InitiateCombat(transform.position);
 
         CharacterStats FriendlyStats = Friendly.GetComponent<CharacterStats>();
         CharacterStats EnemyStats = Enemy.GetComponent<CharacterStats>();
 
-        while (true)
+        int EnemyDamage = FriendlyStats.AttackDamage - EnemyStats.Defense;
+        int FriendlyDamage = EnemyStats.AttackDamage - FriendlyStats.Defense;
+
+        if (FriendlyDamage > 0)
+            FriendlyStats.MaxHealth -= FriendlyDamage;
+        if (EnemyDamage > 0)
+            EnemyStats.MaxHealth -= EnemyDamage;
+
+        if (EnemyStats.MaxHealth <= 0)
         {
-            int EnemyDamage = FriendlyStats.AttackDamage - EnemyStats.Defense;
-            int FriendlyDamage = EnemyStats.AttackDamage - FriendlyStats.Defense;
-
-            if (FriendlyDamage > 0)
-                FriendlyStats.MaxHealth -= FriendlyDamage;
-            if (EnemyDamage > 0)
-                EnemyStats.MaxHealth -= EnemyDamage;
-
-            if (EnemyStats.MaxHealth <= 0)
-            {
-                Destroy(Enemy.gameObject);
-                break;
-            }
-            if (FriendlyStats.MaxHealth <= 0)
-                Destroy(Friendly.gameObject);
-            yield return null;
+            Destroy(Enemy.gameObject);
         }
+        if (FriendlyStats.MaxHealth <= 0)
+            Destroy(Friendly.gameObject);
+
         GameObject.Find("FlowController").GetComponent<FlowController>().WakeAll();
+    }
+
+    IEnumerator PlayCombatAnimation (Transform Friendly, Transform Enemy)
+    {
+        yield return null;
     }
 
     // Moves a unit back to the space it came from
