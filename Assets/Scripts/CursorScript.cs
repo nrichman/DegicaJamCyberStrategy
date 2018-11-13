@@ -36,7 +36,8 @@ public class CursorScript : MonoBehaviour
         // If we're planning an action or the movement stage is happening, return
         if (mActionComponent.mPlanningAction || mFlowController.GetComponent<FlowController>().mInMotion)
         {
-            DeleteDrawnObjects();
+            if (mFlowController.GetComponent<FlowController>().mInMotion)
+                DeleteDrawnObjects();
             mTileSelector.SetActive(false);
             return;
         }
@@ -159,6 +160,9 @@ public class CursorScript : MonoBehaviour
                 if (v == Coordinates[i])
                     repeatCount++;
             }
+
+            if (Coordinates[i] == Coordinates[0])
+                repeatCount--;
 
             // Shift our number counter over based on how many tiles are on the space
             switch (repeatCount)
