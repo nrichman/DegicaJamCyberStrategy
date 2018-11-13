@@ -99,10 +99,20 @@ public class FlowController : MonoBehaviour {
     public void SleepAll ()
     {
         foreach (GameObject FriendlyUnit in mFriendlyUnits)
-            FriendlyUnit.GetComponent<Movement>().mPause = true;
+        {
+            if (FriendlyUnit != null)
+            {
+                FriendlyUnit.GetComponent<Movement>().mPause = true;
+            }
+        }
 
         foreach (GameObject EnemyUnit in mEnemyUnits)
-            EnemyUnit.GetComponent<Movement>().mPause = true;
+        {
+            if (EnemyUnit != null)
+            {
+                EnemyUnit.GetComponent<Movement>().mPause = true;
+            }
+        }
     }
 
     // Puts all units to sleep when a battle occurs
@@ -110,14 +120,20 @@ public class FlowController : MonoBehaviour {
     {
         foreach (GameObject FriendlyUnit in mFriendlyUnits)
         {
-            Debug.Log(FriendlyUnit.transform.name);
-            FriendlyUnit.GetComponent<Movement>().mPause = false;
+            if (FriendlyUnit != null)
+            {
+                FriendlyUnit.GetComponent<Movement>().mPause = false;
+            }
         }
 
         foreach (GameObject EnemyUnit in mEnemyUnits)
         {
-            EnemyUnit.GetComponent<Movement>().mPause = false;
+            if (EnemyUnit != null)
+            {
+                EnemyUnit.GetComponent<Movement>().mPause = false;
+            }
         }
+        mCamera.StartZoomOut();
     }
 
     // Handles combat interactions

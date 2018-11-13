@@ -143,11 +143,10 @@ public class Movement : MonoBehaviour {
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        GameObject.Find("FlowController").GetComponent<FlowController>().SleepAll();
-
         // Units are on opposite teams
         if (transform.tag != collision.tag)
         {
+            GameObject.Find("FlowController").GetComponent<FlowController>().SleepAll();
             // Check the friendly character's collision, important that we only do one battle!
             if (transform.tag == "FriendlyUnit")
             {
@@ -158,14 +157,12 @@ public class Movement : MonoBehaviour {
         {
             PushBack();
         }
-
-        GameObject.Find("FlowController").GetComponent<FlowController>().WakeAll();
     }
 
     void DealCombatDamage (Transform Friendly, Transform Enemy)
     {
         GameObject.Find("FlowController").GetComponent<FlowController>().InitiateCombat(transform.position);
-
+        StartCoroutine(PlayCombatAnimation(Friendly, Enemy));
         CharacterStats FriendlyStats = Friendly.GetComponent<CharacterStats>();
         CharacterStats EnemyStats = Enemy.GetComponent<CharacterStats>();
 
@@ -176,20 +173,27 @@ public class Movement : MonoBehaviour {
             FriendlyStats.MaxHealth -= FriendlyDamage;
         if (EnemyDamage > 0)
             EnemyStats.MaxHealth -= EnemyDamage;
+    }
+
+    IEnumerator PlayCombatAnimation (Transform Friendly, Transform Enemy)
+    {
+        CharacterStats FriendlyStats = Friendly.GetComponent<CharacterStats>();
+        CharacterStats EnemyStats = Enemy.GetComponent<CharacterStats>();
+
+        for (int i = 0; i < 400; i++)
+        {
+            yield return null;
+        }
 
         if (EnemyStats.MaxHealth <= 0)
         {
             Destroy(Enemy.gameObject);
         }
         if (FriendlyStats.MaxHealth <= 0)
+        {
             Destroy(Friendly.gameObject);
-
+        }
         GameObject.Find("FlowController").GetComponent<FlowController>().WakeAll();
-    }
-
-    IEnumerator PlayCombatAnimation (Transform Friendly, Transform Enemy)
-    {
-        yield return null;
     }
 
     // Moves a unit back to the space it came from
