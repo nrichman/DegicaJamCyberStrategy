@@ -126,9 +126,12 @@ public class CameraController : MonoBehaviour {
         while (transform.position != CharacterPos)
         {
             transform.position = Vector3.MoveTowards(transform.position, CharacterPos, Time.deltaTime * 5);
+            yield return null;
+        }
 
-            if (mCamera.orthographicSize > 3)
-                mCamera.orthographicSize -= Time.deltaTime * mAutoScaleSpeed;
+        while (mCamera.orthographicSize > 3)
+        {
+            mCamera.orthographicSize -= Time.deltaTime * mAutoScaleSpeed;
             yield return null;
         }
     }
