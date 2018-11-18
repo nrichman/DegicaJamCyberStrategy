@@ -15,17 +15,12 @@ public class Movement : MonoBehaviour {
     public bool mPause = false; // Pause movement while in battle
     [HideInInspector] public CharacterStats mCharacterStats;
 
-    void Awake ()
+    void Awake()
     {
         mCharacterStats = GetComponent<CharacterStats>();
         mMovementStack = new Stack<Vector3>();
         mAnimator = GetComponent<Animator>();
     }
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
 
     // Move the player through their stack
     IEnumerator MovementMachine()

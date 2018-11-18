@@ -14,6 +14,7 @@ public class ActionSelector : MonoBehaviour {
     // Shows the action buttons when hovering
     public void ShowActionButtons()
     {
+        Debug.Log(mSelectedCharacter.GetComponent<CharacterStats>().Action);
         // Iterate through children. Top 3 are action buttons, fourth is cancel button
         // Need to disable all of the actions and highlight the selected action
         int ChildNum = 0;
@@ -29,7 +30,12 @@ public class ActionSelector : MonoBehaviour {
             Selectable childButton = child.GetComponent<Selectable>();
             ChildNum++;
             childButton.interactable = false;
-            if (ChildNum == mAction)
+
+            // I introduced a super gross bug at some point, here's a super gross bandaid to hold all this spaghetti together
+            // If we're hovering, use the character's action. If we're selecting, use mAction
+            if (mSelectedCharacter.GetComponent<Movement>().mTurnText != "" && ChildNum == mSelectedCharacter.GetComponent<CharacterStats>().Action)
+                ColorSelected(childButton);
+            else if (ChildNum == mAction)
                 ColorSelected(childButton);
             else
                 ColorNotSelected(childButton);

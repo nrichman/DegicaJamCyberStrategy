@@ -12,11 +12,6 @@ public class ButtonFunction : MonoBehaviour {
         ActionSelector = mActionSelector.GetComponent<ActionSelector>();
     }
 	
-	// Update is called once per frame
-	void Update () {
-		
-	}
-
     public void ActionCancel()
     {
         ActionSelector.Cancel();

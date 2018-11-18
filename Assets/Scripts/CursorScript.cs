@@ -29,6 +29,7 @@ public class CursorScript : MonoBehaviour
         mMovementStack = new List<Vector3>();
         mFlowController = GameObject.Find("FlowController");
         mActionComponent = mActionSelector.GetComponent<ActionSelector>();
+        GameObject.Find("Allies").GetComponentInChildren<CharacterStats>().UI_SetStats();
     }
 
     void Update()
@@ -86,6 +87,7 @@ public class CursorScript : MonoBehaviour
                         mActionComponent.Hovering(true);
                     }
                 }
+                collider.gameObject.GetComponent<CharacterStats>().UI_SetStats();
             }
         }
     }
