@@ -101,7 +101,7 @@ public class CursorScript : MonoBehaviour
             {
                 // Ensure the tile is adjacent and capped at our character's speed
                 if (IsAdjacent(mMovementStack[mMovementStack.Count - 1], MouseCellPos)
-                    && mSelectedCharacter.GetComponent<Movement>().mCharacterStats.Speed > mMovementStack.Count - 1)
+                    && mSelectedCharacter.GetComponent<Movement>().mCharacterStats.Movement > mMovementStack.Count - 1)
                 {
                     mMovementStack.Add(MouseCellPos);
                     DrawMovementColors(mMovementStack);

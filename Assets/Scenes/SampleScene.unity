@@ -221,7 +221,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: <b>ACTION</b>
+  m_Text: <b>RUSH</b>
 --- !u!222 &68363050
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -9680,13 +9680,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d57fe7450c6e46f4b944ed4031a0f0cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mCharacterStats: {fileID: 0}
-  Step: 1
   mAction: 0
   mTurnText: 
   mLocked: 0
   mInMotion: 0
   mPause: 0
+  mCharacterStats: {fileID: 0}
 --- !u!61 &165508294
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -9805,7 +9804,10 @@ MonoBehaviour:
   MaxHealth: 1
   AttackDamage: 0
   Defense: 0
-  Speed: 0
+  Movement: 0
+  Speed: 1
+  Action: 0
+  mCharaterType: 0
 --- !u!1 &315569410
 GameObject:
   m_ObjectHideFlags: 0
@@ -9922,7 +9924,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 420737479}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1, y: 1, z: 0}
+  m_LocalPosition: {x: 0, y: 1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 123219580}
@@ -9984,13 +9986,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d57fe7450c6e46f4b944ed4031a0f0cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mCharacterStats: {fileID: 0}
-  Step: 1
   mAction: 0
   mTurnText: 
   mLocked: 0
   mInMotion: 0
   mPause: 0
+  mCharacterStats: {fileID: 0}
 --- !u!95 &420737485
 Animator:
   serializedVersion: 3
@@ -10023,7 +10024,10 @@ MonoBehaviour:
   MaxHealth: 5
   AttackDamage: 5
   Defense: 0
-  Speed: 6
+  Movement: 6
+  Speed: 1
+  Action: 0
+  mCharaterType: 0
 --- !u!1 &472788711
 GameObject:
   m_ObjectHideFlags: 0
@@ -10161,7 +10165,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300064, guid: ccc13a7b40b6dcd47abf886c73d6c05b, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 6cc1ce505cf5970429195f621b412768, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -10681,7 +10685,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1128421858
 Transform:
   m_ObjectHideFlags: 0
@@ -10724,13 +10728,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d57fe7450c6e46f4b944ed4031a0f0cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mCharacterStats: {fileID: 0}
-  Step: 1
   mAction: 0
   mTurnText: 
   mLocked: 0
   mInMotion: 0
   mPause: 0
+  mCharacterStats: {fileID: 0}
 --- !u!61 &1128421861
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -10836,7 +10839,10 @@ MonoBehaviour:
   MaxHealth: 1
   AttackDamage: 0
   Defense: 0
-  Speed: 0
+  Movement: 0
+  Speed: 1
+  Action: 0
+  mCharaterType: 0
 --- !u!1 &1247903777
 GameObject:
   m_ObjectHideFlags: 0
@@ -11633,7 +11639,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: <b>ACTION</b>
+  m_Text: <b>STALL</b>
 --- !u!222 &1524122615
 CanvasRenderer:
   m_ObjectHideFlags: 0

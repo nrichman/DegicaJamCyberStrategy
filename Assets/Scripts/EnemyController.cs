@@ -11,7 +11,9 @@ public class EnemyController : MonoBehaviour {
         mEnemyMovements = new List<Movement>();
         foreach (Transform child in transform)
         {
+            // It's a stack it goes reverse
             child.GetComponent<Movement>().SetMovementStack(new Stack<Vector3>());
+            child.GetComponent<Movement>().mMovementStack.Push(new Vector3(0, 0, 0));
             child.GetComponent<Movement>().mMovementStack.Push(new Vector3(1, 0, 0));
         }
     }

@@ -89,7 +89,7 @@ public class ActionSelector : MonoBehaviour {
 
     public void FinishAction()
     {
-        mSelectedCharacter.GetComponent<Movement>().mAction = mAction;
+        mSelectedCharacter.GetComponent<CharacterStats>().Action = mAction;
         mSelectedCharacter.GetComponent<Movement>().mTurnText = mTurnText;
         ResetActionButtons();
         HideActionButtons();
