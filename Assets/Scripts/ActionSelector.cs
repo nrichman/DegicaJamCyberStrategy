@@ -11,6 +11,8 @@ public class ActionSelector : MonoBehaviour {
     [HideInInspector] public GameObject mSelectedCharacter;
     [HideInInspector] public GameObject mTurnSelector;
 
+    private string mAbilityText;
+
     // Shows the action buttons when hovering
     public void ShowActionButtons()
     {
