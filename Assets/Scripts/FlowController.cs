@@ -10,6 +10,8 @@ public class FlowController : MonoBehaviour {
     public GameObject mActionSelector;
     public bool mInMotion = false;
 
+    public float mActionNum = 0;
+
     // Use this for initialization
     void Start () {
         mFriendlyUnits = GameObject.FindGameObjectsWithTag("FriendlyUnit");
@@ -63,13 +65,19 @@ public class FlowController : MonoBehaviour {
         foreach (GameObject FriendlyUnit in mFriendlyUnits)
         {
             if (FriendlyUnit != null)
+            {
                 FriendlyUnit.GetComponent<BoxCollider2D>().size = new Vector2(.95f, .95f);
+                FriendlyUnit.GetComponent<Movement>().mMoveCount = 0;
+            }
         }
 
         foreach (GameObject EnemyUnit in mEnemyUnits)
         {
             if (EnemyUnit != null)
+            {
                 EnemyUnit.GetComponent<BoxCollider2D>().size = new Vector2(.95f, .95f);
+                EnemyUnit.GetComponent<Movement>().mMoveCount = 0;
+            }
         }
     }
 
@@ -140,5 +148,24 @@ public class FlowController : MonoBehaviour {
     public void InitiateCombat (Vector3 PlayerPos)
     {
         mCamera.StartZoomToCharacter(PlayerPos);
+    }
+
+    public void NotifyAction()
+    {
+        foreach (GameObject FriendlyUnit in mFriendlyUnits)
+        {
+            if (FriendlyUnit != null)
+            {
+                FriendlyUnit.GetComponent<CharacterStats>().ActionActivate();
+            }
+        }
+
+        foreach (GameObject EnemyUnit in mEnemyUnits)
+        {
+            if (EnemyUnit != null)
+            {
+                EnemyUnit.GetComponent<CharacterStats>().ActionActivate();
+            }
+        }
     }
 }

@@ -62,6 +62,7 @@ public class CharacterStats : MonoBehaviour {
         switch (mCharaterType)
         {
             case CharacterType.BOUNCER:
+                Debug.Log("BOUNCIN");
                 break;
             case CharacterType.CONVICT:
                 break;
@@ -109,5 +110,10 @@ public class CharacterStats : MonoBehaviour {
         InfoAtt.GetComponent<Text>().text = AttackDamage.ToString();
         InfoDef.GetComponent<Text>().text = Defense.ToString();
         InfoMove.GetComponent<Text>().text = Movement.ToString();
+    }
+
+    public void ActionActivate()
+    {
+        CharacterAction();
     }
 }

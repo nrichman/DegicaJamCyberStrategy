@@ -9761,6 +9761,7 @@ MonoBehaviour:
   mInMotion: 0
   mPause: 0
   mCharacterStats: {fileID: 0}
+  mMoveCount: 0
 --- !u!61 &165508294
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -9882,7 +9883,7 @@ MonoBehaviour:
   Movement: 0
   Speed: 1
   Action: 0
-  mCharaterType: 0
+  mCharaterType: 6
 --- !u!1 &248584916
 GameObject:
   m_ObjectHideFlags: 0
@@ -10357,6 +10358,7 @@ MonoBehaviour:
   mInMotion: 0
   mPause: 0
   mCharacterStats: {fileID: 0}
+  mMoveCount: 0
 --- !u!95 &420737485
 Animator:
   serializedVersion: 3
@@ -10732,6 +10734,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mActionSelector: {fileID: 723087700}
   mInMotion: 0
+  mActionNum: 0
 --- !u!4 &576353136
 Transform:
   m_ObjectHideFlags: 0
@@ -11307,6 +11310,7 @@ MonoBehaviour:
   mInMotion: 0
   mPause: 0
   mCharacterStats: {fileID: 0}
+  mMoveCount: 0
 --- !u!61 &1128421861
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -11415,7 +11419,7 @@ MonoBehaviour:
   Movement: 0
   Speed: 1
   Action: 0
-  mCharaterType: 0
+  mCharaterType: 6
 --- !u!1 &1247903777
 GameObject:
   m_ObjectHideFlags: 0

@@ -16,7 +16,6 @@ public class ActionSelector : MonoBehaviour {
     // Shows the action buttons when hovering
     public void ShowActionButtons()
     {
-        Debug.Log(mSelectedCharacter.GetComponent<CharacterStats>().Action);
         // Iterate through children. Top 3 are action buttons, fourth is cancel button
         // Need to disable all of the actions and highlight the selected action
         int ChildNum = 0;

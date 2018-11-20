@@ -15,11 +15,15 @@ public class Movement : MonoBehaviour {
     public bool mPause = false; // Pause movement while in battle
     [HideInInspector] public CharacterStats mCharacterStats;
 
+    private FlowController mFlowController;
+    public float mMoveCount = 0; // Amount of movements this unit has done
+
     void Awake()
     {
         mCharacterStats = GetComponent<CharacterStats>();
         mMovementStack = new Stack<Vector3>();
         mAnimator = GetComponent<Animator>();
+        mFlowController = GameObject.Find("FlowController").GetComponent<FlowController>();
     }
 
     // Move the player through their stack
@@ -41,6 +45,31 @@ public class Movement : MonoBehaviour {
                 GetCharacterOnTile();
                 mLastMovement = transform.position;
                 mMovementStack.Pop();
+
+
+                switch (mAction)
+                {
+                    // Character is rushing, moves count half
+                    case 2:
+                        mMoveCount += 0.5f;
+                        break;
+                    // Character is fortified, moves count double
+                    case 3:
+                        mMoveCount += 2;
+                        break;
+                    default:
+                        ++mMoveCount;
+                        break;
+                }
+
+                // Notify everyone it's action time
+                if (mMoveCount > mFlowController.mActionNum )
+                {
+                    mFlowController.mActionNum = mMoveCount;
+                    mFlowController.NotifyAction();
+                }
+
+                // Turn to face the next direction
                 if (mMovementStack.Count > 0)
                     SetAnimationDirection(transform.position, mMovementStack.Peek());
             }
