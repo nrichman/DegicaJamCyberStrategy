@@ -272,5 +272,10 @@ public class Movement : MonoBehaviour {
    
         return AdjacentCharacters;
     }
+
+    public bool GetStillMoving()
+    {
+        return (mMovementStack.Count > 0);
+    }
 }
 

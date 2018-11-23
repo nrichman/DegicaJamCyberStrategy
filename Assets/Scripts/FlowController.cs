@@ -34,6 +34,7 @@ public class FlowController : MonoBehaviour {
             foreach (GameObject FriendlyUnit in mFriendlyUnits)
             {
                 Movement FriendlyUnitMovement = FriendlyUnit.GetComponent<Movement>();
+                FriendlyUnit.GetComponent<CharacterStats>().mTurnGoing = true;
                 FriendlyUnitMovement.mInMotion = true;
                 FriendlyUnitMovement.StartMovement();
                 FriendlyUnit.GetComponent<BoxCollider2D>().size = new Vector2(.5f, .5f);
@@ -42,6 +43,7 @@ public class FlowController : MonoBehaviour {
             foreach (GameObject EnemyUnit in mEnemyUnits)
             {
                 Movement EnemyUnitMovement = EnemyUnit.GetComponent<Movement>();
+                EnemyUnit.GetComponent<CharacterStats>().mTurnGoing = true;
                 EnemyUnitMovement.mInMotion = true;
                 EnemyUnitMovement.StartMovement();
                 EnemyUnit.GetComponent<BoxCollider2D>().size = new Vector2(.5f, .5f);
@@ -88,8 +90,10 @@ public class FlowController : MonoBehaviour {
             // Unit may have died here
             if (Unit == null)
                 continue;
-            if (Unit.GetComponent<Movement>().mInMotion)
+            if (Unit.GetComponent<Movement>().mInMotion){
+                Unit.GetComponent<CharacterStats>().mTurnGoing = true;
                 return true;
+            }
         }
 
         foreach (GameObject Unit in mEnemyUnits)
@@ -98,8 +102,25 @@ public class FlowController : MonoBehaviour {
             if (Unit == null)
                 continue;
             if (Unit.GetComponent<Movement>().mInMotion)
+            {
+                Unit.GetComponent<CharacterStats>().mTurnGoing = true;
                 return true;
+            }
         }
+
+        foreach (GameObject Unit in mFriendlyUnits){
+            if (Unit == null)
+                continue;
+            Unit.GetComponent<CharacterStats>().mTurnGoing = false;
+        }
+
+        foreach (GameObject Unit in mEnemyUnits)
+        {
+            if (Unit == null)
+                continue;
+            Unit.GetComponent<CharacterStats>().mTurnGoing = false;
+        }
+
         return false;
     }
 

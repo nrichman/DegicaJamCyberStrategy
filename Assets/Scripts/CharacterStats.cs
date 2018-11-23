@@ -12,8 +12,10 @@ public class CharacterStats : MonoBehaviour {
     public float Speed = 1;
     public int Action = 0;
 
-    private bool mActing;
+    public bool mTurnGoing = false; // Boolean telling the unit if other units are still moving
+    private bool mActing; // Boolean telling the unit if it's personally still acting
     private GameObject infoBar;
+    private bool mPassiveActivated = false; // Boolean used to know if the passive coroutine is running
 
     void Awake()
     {
@@ -57,12 +59,13 @@ public class CharacterStats : MonoBehaviour {
         mActing = false;
     }
 
+    // Switch to control each character's specific action
     public void CharacterAction()
     {
         switch (mCharaterType)
         {
             case CharacterType.BOUNCER:
-                Debug.Log("BOUNCIN");
+                BouncerAction();
                 break;
             case CharacterType.CONVICT:
                 break;
@@ -79,6 +82,63 @@ public class CharacterStats : MonoBehaviour {
         }
     }
 
+        // Switch to control each character's specific action
+    public void CharacterPassive()
+    {
+        switch (mCharaterType)
+        {
+            case CharacterType.BOUNCER:
+                BouncerPassive();
+                break;
+            case CharacterType.CONVICT:
+                break;
+            case CharacterType.ASSASSIN:
+                break;
+            case CharacterType.ROCKSTAR:
+                break;
+            case CharacterType.MECHULTIST:
+                break;
+            case CharacterType.RAT:
+                break;
+            default:
+                break;
+        }
+    }
+
+    // Active - Stops nearby enemy movement
+    public void BouncerAction()
+    {
+        List<GameObject> AdjacentUnits = gameObject.GetComponent<Movement>().GetAllAdjacentCharacters();
+        foreach (GameObject go in AdjacentUnits)
+        {
+            go.GetComponent<Movement>().SetMovementStack(new Stack<Vector3>());
+        }
+    }
+
+    // Passive - Gives bonus defence if no movements in the queue
+    public void BouncerPassive()
+    {
+        if (!gameObject.GetComponent<Movement>().GetStillMoving() &&
+                mTurnGoing && !mPassiveActivated)
+        {
+            StartCoroutine(BouncerPassiveActivate());
+        }
+    }
+
+    IEnumerator BouncerPassiveActivate()
+    {
+        mPassiveActivated = true;
+        Defense += 3;
+        while (mTurnGoing) {
+                    Debug.Log("A");
+            yield return null;
+        }
+                Debug.Log("B");
+        Defense -= 3;
+        mPassiveActivated = false;
+    }
+
+    // Leeerrooyyy
     IEnumerator Rush()
     {
         Speed = 2f;
@@ -89,6 +149,7 @@ public class CharacterStats : MonoBehaviour {
         Defense += 3;
     }
 
+    // Slow game zzz
     IEnumerator Fortify()
     {
         Speed = 0.5f;
@@ -114,6 +175,8 @@ public class CharacterStats : MonoBehaviour {
 
     public void ActionActivate()
     {
-        CharacterAction();
+        if (Action == 1)
+            CharacterAction();
+        CharacterPassive();
     }
 }
