@@ -72,6 +72,7 @@ public class Movement : MonoBehaviour {
             }
             yield return null;
         }
+        mAnimator.SetBool("Walking", false);
         mCharacterStats.ActionStop();
         Unlock();
     }
@@ -99,6 +100,7 @@ public class Movement : MonoBehaviour {
     {
         gameObject.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
         mCharacterStats.ActionStart();
+        mAnimator.SetBool("Walking", true);
         StartCoroutine(MovementMachine());
     }
 
@@ -168,10 +170,14 @@ public class Movement : MonoBehaviour {
         CharacterStats FriendlyStats = Friendly.GetComponent<CharacterStats>();
         CharacterStats EnemyStats = Enemy.GetComponent<CharacterStats>();
 
+        Friendly.GetComponent<Animator>().SetBool("Attacking", true);
+
         for (int i = 0; i < 400; i++)
         {
             yield return null;
         }
+
+        Friendly.GetComponent<Animator>().SetBool("Attacking", false);
 
         if (EnemyStats.MaxHealth <= 0)
         {
