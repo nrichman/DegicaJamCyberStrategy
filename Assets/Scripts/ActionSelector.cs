@@ -9,7 +9,6 @@ public class ActionSelector : MonoBehaviour {
     [HideInInspector] public int mAction;
     [HideInInspector] public string mTurnText;
     [HideInInspector] public GameObject mSelectedCharacter;
-    [HideInInspector] public GameObject mTurnSelector;
 
     private string mAbilityText;
 
@@ -43,25 +42,6 @@ public class ActionSelector : MonoBehaviour {
         }
     }
 
-    // Shows the turn buttons when hovering
-    public void ShowTurnButtons()
-    {
-        mTurnSelector.SetActive(true);
-        int ChildNum = -1;
-        foreach (Transform child in mTurnSelector.gameObject.transform)
-        {
-            ChildNum++;
-            if (ChildNum == 0)
-                continue;
-            Selectable childButton = child.GetComponent<Selectable>();
-            childButton.interactable = false;
-            if (child.name == mTurnText)
-                ColorSelected(childButton);
-            else
-                ColorNotSelected(childButton);
-        }
-    }
-
     // Changes all of the action buttons and turn buttons back to their interactable state
     public void ResetActionButtons()
     {
@@ -74,30 +54,18 @@ public class ActionSelector : MonoBehaviour {
                 childButton.interactable = true;
             }
         }
-
-        foreach (Transform child in mTurnSelector.gameObject.transform)
-        {
-            if (child.GetComponent<Selectable>() != null)
-            {
-                Selectable childButton = child.GetComponent<Selectable>();
-                childButton.interactable = true;
-            }
-        }
     }
 
     // An action was selected, show the action buttons and toggle the turn selector
     public void ActionSelected()
     {
         // Set the character's action to the selected button
-        ShowActionButtons();
-        // Toggle the turn selector on
-        mTurnSelector.SetActive(true);
+        FinishAction();
     }
 
     public void FinishAction()
     {
         mSelectedCharacter.GetComponent<CharacterStats>().Action = mAction;
-        mSelectedCharacter.GetComponent<Movement>().mTurnText = mTurnText;
         ResetActionButtons();
         HideActionButtons();
         mSelectedCharacter.GetComponent<Movement>().Lock();
@@ -110,12 +78,10 @@ public class ActionSelector : MonoBehaviour {
         {
             gameObject.SetActive(true);
             ShowActionButtons();
-            ShowTurnButtons();
         }
         else
         {
             ResetActionButtons();
-            mTurnSelector.gameObject.SetActive(false);
             gameObject.SetActive(false);
         }
     }
@@ -123,7 +89,6 @@ public class ActionSelector : MonoBehaviour {
     public void HideActionButtons()
     {
         gameObject.SetActive(false);
-        mTurnSelector.SetActive(false);
     }
 
     void ColorSelected (Selectable child) {

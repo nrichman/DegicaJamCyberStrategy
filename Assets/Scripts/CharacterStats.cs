@@ -130,10 +130,8 @@ public class CharacterStats : MonoBehaviour {
         mPassiveActivated = true;
         Defense += 3;
         while (mTurnGoing) {
-                    Debug.Log("A");
             yield return null;
         }
-                Debug.Log("B");
         Defense -= 3;
         mPassiveActivated = false;
     }

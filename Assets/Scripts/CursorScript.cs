@@ -192,7 +192,10 @@ public class CursorScript : MonoBehaviour
             mDrawnObjects.Add(newGreenTile);
             mDrawnObjects.Add(newNumberTile);
         }
-        mDrawnObjects.Add(Instantiate(GreenTile, Coordinates[0], new Quaternion()));
+        if (mSelectedCharacter == null && !mActionComponent.mPlanningAction)
+            mDrawnObjects.Add(Instantiate(GreenTile, Coordinates[0] - new Vector3(.5f,.5f,0), new Quaternion()));
+        else
+            mDrawnObjects.Add(Instantiate(GreenTile, Coordinates[0], new Quaternion()));
     }
 
     // Cleans up all drawn objects

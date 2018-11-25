@@ -38,9 +38,10 @@ public class Movement : MonoBehaviour {
                 yield return null;
                 continue;
             }
-            SetAnimationDirection(transform.position, mMovementStack.Peek());
-            transform.position = Vector3.MoveTowards(transform.position, mMovementStack.Peek(), mCharacterStats.Speed * Time.deltaTime);
-            if (transform.position == mMovementStack.Peek())
+            Vector3 Movement = mMovementStack.Peek() + new Vector3(.5f, .5f, 0);
+            SetAnimationDirection(transform.position, Movement);
+            transform.position = Vector3.MoveTowards(transform.position, Movement, mCharacterStats.Speed * Time.deltaTime);
+            if (transform.position == Movement)
             {
                 GetCharacterOnTile();
                 mLastMovement = transform.position;
@@ -68,15 +69,10 @@ public class Movement : MonoBehaviour {
                     mFlowController.mActionNum = mMoveCount;
                     mFlowController.NotifyAction();
                 }
-
-                // Turn to face the next direction
-                if (mMovementStack.Count > 0)
-                    SetAnimationDirection(transform.position, mMovementStack.Peek());
             }
             yield return null;
         }
         mCharacterStats.ActionStop();
-        TurnPlayer();
         Unlock();
     }
 
@@ -108,45 +104,14 @@ public class Movement : MonoBehaviour {
 
     private void SetAnimationDirection(Vector3 oldDirection, Vector3 newDirection)
     {
-        // Moving on Y axis
-        if (oldDirection.x == newDirection.x)
+        if (oldDirection.x > newDirection.x)
         {
-            if (oldDirection.y < newDirection.y)
-                mAnimator.SetInteger("Direction", 2);
-            else
-                mAnimator.SetInteger("Direction", 0);
+            transform.GetComponent<SpriteRenderer>().flipX = true;
         }
-        // Moving on X axis
-        else
+        else if (oldDirection.x < newDirection.x)
         {
-            if (oldDirection.x > newDirection.x)
-                mAnimator.SetInteger("Direction", 1);
-            else
-                mAnimator.SetInteger("Direction", 3);
+            transform.GetComponent<SpriteRenderer>().flipX = false;
         }
-    }
-
-    // Turns the player when they finish their movement action
-    int TurnPlayer()
-    {
-        switch (mTurnText)
-        {
-            case "Up":
-                SetAnimationDirection(new Vector3(0, 0, 0), new Vector3(0, 1, 0));
-                break;
-            case "Down":
-                SetAnimationDirection(new Vector3(0, 1, 0), new Vector3(0, 0, 0));
-                break;
-            case "Left":
-                SetAnimationDirection(new Vector3(1, 0, 0), new Vector3(0, 0, 0));
-                break;
-            case "Right":
-                SetAnimationDirection(new Vector3(0, 0, 0), new Vector3(1, 0, 0));
-                break;
-            default:
-                break;
-        }
-        return 1;
     }
 
     public void Lock()
