@@ -5,7 +5,7 @@ AnimatorController:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: Swordsman
+  m_Name: Sniper
   serializedVersion: 5
   m_AnimatorParameters:
   - m_Name: Walking
@@ -135,7 +135,7 @@ AnimatorState:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: SwordsmanIdle
+  m_Name: SniperIdle
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -149,7 +149,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: dc9e162ba19045b4892d77a9acc0ed99, type: 2}
+  m_Motion: {fileID: 7400000, guid: efdffb03f51b2634aa46f18825c35963, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -161,7 +161,7 @@ AnimatorState:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: SwordsmanAttack
+  m_Name: SniperAttack
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -175,7 +175,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: a9c9eeea1c6e9c541aac96a62ad6a3f7, type: 2}
+  m_Motion: {fileID: 7400000, guid: 5e0508354020414488e59ba1deb39443, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -187,7 +187,7 @@ AnimatorState:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: SwordsmanWalking
+  m_Name: SniperMoving
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -202,7 +202,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 8d0529e54d0ede243bb303963e668636, type: 2}
+  m_Motion: {fileID: 7400000, guid: 68059708b340efb409b232dcb243236a, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 

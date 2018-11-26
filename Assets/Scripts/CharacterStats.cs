@@ -76,6 +76,7 @@ public class CharacterStats : MonoBehaviour {
             case CharacterType.MECHULTIST:
                 break;
             case CharacterType.RAT:
+                RatAction();
                 break;
             default:
                 break;
@@ -134,6 +135,21 @@ public class CharacterStats : MonoBehaviour {
         }
         Defense -= 3;
         mPassiveActivated = false;
+    }
+
+    public void RatAction()
+    {
+        StartCoroutine(RatActiveEnumerator());
+    }
+
+    IEnumerator RatActiveEnumerator()
+    {
+        transform.GetComponent<BoxCollider2D>().enabled = false;
+        while (mActing)
+        {
+            yield return null;
+        }
+        transform.GetComponent<BoxCollider2D>().enabled = true;
     }
 
     // Leeerrooyyy

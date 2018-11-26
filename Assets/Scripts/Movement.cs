@@ -142,6 +142,11 @@ public class Movement : MonoBehaviour {
             {
                DealCombatDamage(transform, collision.transform);
             }
+
+            if (transform.GetComponent<CharacterStats>().MaxHealth > 0)
+            {
+                PushBack();
+            }
         }
         else
         {
@@ -171,6 +176,7 @@ public class Movement : MonoBehaviour {
         CharacterStats EnemyStats = Enemy.GetComponent<CharacterStats>();
 
         Friendly.GetComponent<Animator>().SetBool("Attacking", true);
+        Enemy.GetComponent<Animator>().SetBool("Attacking", true);
 
         for (int i = 0; i < 400; i++)
         {
@@ -178,6 +184,7 @@ public class Movement : MonoBehaviour {
         }
 
         Friendly.GetComponent<Animator>().SetBool("Attacking", false);
+        Enemy.GetComponent<Animator>().SetBool("Attacking", false);
 
         if (EnemyStats.MaxHealth <= 0)
         {
@@ -187,14 +194,20 @@ public class Movement : MonoBehaviour {
         {
             Destroy(Friendly.gameObject);
         }
+
+        if (EnemyStats.MaxHealth > 0 && FriendlyStats.MaxHealth > 0)
+        {
+            PushBack();
+        }
         GameObject.Find("FlowController").GetComponent<FlowController>().WakeAll();
     }
 
     // Moves a unit back to the space it came from
     public void PushBack ()
     {
+        
         mMovementStack.Clear();
-        mMovementStack.Push(mLastMovement);
+        mMovementStack.Push(mLastMovement  - new Vector3(.5f, .5f, 0));
     }
 
     public void GetCharacterOnTile()
