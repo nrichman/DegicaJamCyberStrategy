@@ -37,7 +37,7 @@ public class FlowController : MonoBehaviour {
                 FriendlyUnit.GetComponent<CharacterStats>().mTurnGoing = true;
                 FriendlyUnitMovement.mInMotion = true;
                 FriendlyUnitMovement.StartMovement();
-                FriendlyUnit.GetComponent<BoxCollider2D>().size = new Vector2(.5f, .5f);
+                FriendlyUnit.GetComponent<BoxCollider2D>().size = new Vector2(.4f, .4f);
             }
 
             foreach (GameObject EnemyUnit in mEnemyUnits)
@@ -46,7 +46,7 @@ public class FlowController : MonoBehaviour {
                 EnemyUnit.GetComponent<CharacterStats>().mTurnGoing = true;
                 EnemyUnitMovement.mInMotion = true;
                 EnemyUnitMovement.StartMovement();
-                EnemyUnit.GetComponent<BoxCollider2D>().size = new Vector2(.5f, .5f);
+                EnemyUnit.GetComponent<BoxCollider2D>().size = new Vector2(.4f, .4f);
             }
 
             StartCoroutine(RunSequence());
@@ -188,5 +188,18 @@ public class FlowController : MonoBehaviour {
                 EnemyUnit.GetComponent<CharacterStats>().ActionActivate();
             }
         }
+    }
+
+    public List<GameObject> GetFriendlyUnits()
+    {
+        List<GameObject> MyList = new List<GameObject>();
+        foreach (GameObject Character in mFriendlyUnits)
+        {
+            if (Character != null)
+            {
+                MyList.Add(Character);
+            }
+        }
+        return MyList;
     }
 }

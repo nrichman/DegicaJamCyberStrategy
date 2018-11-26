@@ -174,10 +174,25 @@ public class Movement : MonoBehaviour {
         {
             FriendlyStats.MaxHealth += FriendlyDamage;
         }
+
+        // Rockstar's passive, if rockstar died then damage enemy
+        if (EnemyStats.MaxHealth > 0 && FriendlyStats.mCharaterType == CharacterStats.CharacterType.ROCKSTAR)
+        {
+            EnemyStats.MaxHealth -= 5;
+        }
+
+        // Convict's passive, if enemey died buff the unit
+        if (EnemyStats.MaxHealth <= 0 && FriendlyStats.mCharaterType == CharacterStats.CharacterType.CONVICT)
+        {
+            FriendlyStats.MaxHealth += 1;
+            FriendlyStats.AttackDamage += 1;
+            FriendlyStats.Movement += 1;
+        }
     }
 
     IEnumerator PlayCombatAnimation (Transform Friendly, Transform Enemy)
     {
+        Debug.Log("A");
         CharacterStats FriendlyStats = Friendly.GetComponent<CharacterStats>();
         CharacterStats EnemyStats = Enemy.GetComponent<CharacterStats>();
 
@@ -208,6 +223,11 @@ public class Movement : MonoBehaviour {
         GameObject.Find("FlowController").GetComponent<FlowController>().WakeAll();
     }
 
+    public void PlayAnimation(Transform Friendly, Transform Enemy)
+    {
+        StartCoroutine(PlayCombatAnimation(Friendly, Enemy));
+    }
+
     // Moves a unit back to the space it came from
     public void PushBack ()
     {
@@ -231,7 +251,7 @@ public class Movement : MonoBehaviour {
         {
             foreach (var collider in mColliders)
             {
-                Debug.Log(transform.gameObject.name + " " + collider.gameObject.name);
+                //Debug.Log(transform.gameObject.name + " " + collider.gameObject.name);
             }
         }
     }
@@ -241,6 +261,7 @@ public class Movement : MonoBehaviour {
         List<GameObject> AdjacentCharacters = new List<GameObject>();
 
         Vector3 offset = new Vector3(0f, 0f, 0);
+
         Vector3 upOne = transform.position + new Vector3(0, 1, 0) + offset;
         Vector3 rightOne = transform.position + new Vector3(1, 0, 0) + offset;
         Vector3 downOne = transform.position + new Vector3(0, -1, 0) + offset;

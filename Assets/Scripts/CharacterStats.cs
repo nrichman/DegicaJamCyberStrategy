@@ -19,9 +19,15 @@ public class CharacterStats : MonoBehaviour {
     private bool mPassiveActivated = false; // Boolean used to know if the passive coroutine is running
     private bool mActiveActivated = false;
 
+    private GameObject mFlowController;
+
+    public bool RockstarBuff = false;
+    public bool AssassinBuff = false;
+
     void Awake()
     {
         infoBar = GameObject.Find("InfoBar");
+        mFlowController = GameObject.Find("FlowController");
     }
 
     public enum CharacterType
@@ -70,10 +76,13 @@ public class CharacterStats : MonoBehaviour {
                 BouncerAction();
                 break;
             case CharacterType.CONVICT:
+                ConvictAction();
                 break;
             case CharacterType.ASSASSIN:
+                AssassinActive();
                 break;
             case CharacterType.ROCKSTAR:
+                RockstarAction();
                 break;
             case CharacterType.MECHULTIST:
                 MechultistActive();
@@ -86,7 +95,7 @@ public class CharacterStats : MonoBehaviour {
         }
     }
 
-        // Switch to control each character's specific action
+    // Switch to control each character's specific action
     public void CharacterPassive()
     {
         switch (mCharaterType)
@@ -95,10 +104,13 @@ public class CharacterStats : MonoBehaviour {
                 BouncerPassive();
                 break;
             case CharacterType.CONVICT:
+                // Implemented in movement :(
                 break;
             case CharacterType.ASSASSIN:
+                AssassinPassive();
                 break;
             case CharacterType.ROCKSTAR:
+                // Implemented in movement :(
                 break;
             case CharacterType.MECHULTIST:
                 MechultistPassive();
@@ -109,6 +121,151 @@ public class CharacterStats : MonoBehaviour {
             default:
                 break;
         }
+    }
+
+    public void AssassinActive()
+    {
+        if (!mActiveActivated)
+            StartCoroutine(AssassinActiveActivate());
+    }
+
+    // Select a random enemy unit adjacent to an ally and shoot em
+    IEnumerator AssassinActiveActivate()
+    {
+        mActiveActivated = true;
+        Debug.Log("YO");
+        while (mTurnGoing)
+            yield return null;
+ 
+        List<GameObject> mFriendlyList = mFlowController.GetComponent<FlowController>().GetFriendlyUnits().GetRange(0, mFlowController.GetComponent<FlowController>().GetFriendlyUnits().Count);
+        mFriendlyList.Sort((a, b) => 1 - 2 * Random.Range(0, 1));
+
+        foreach (GameObject Unit in mFriendlyList)
+        {
+            if (Unit == gameObject)
+                continue;
+            List<GameObject> AdjacentList = Unit.GetComponent<Movement>().GetAllAdjacentCharacters();
+            if (AdjacentList.Count > 0)
+            {
+                foreach (GameObject Unit2 in AdjacentList)
+                {
+                    if (Unit2.tag == "EnemyUnit")
+                    {
+                        Unit2.GetComponent<CharacterStats>().MaxHealth -= AttackDamage;
+
+                        if (Unit2.GetComponent<CharacterStats>().MaxHealth <= 0)
+                            Unit2.GetComponent<CharacterStats>().MaxHealth = 1;
+                        mActiveActivated = false;
+                        yield break;
+                    }
+                }
+            }
+        }
+        mActiveActivated = false;
+    }
+
+    public void AssassinPassive()
+    {
+        List<GameObject> AdjacentUnits = gameObject.GetComponent<Movement>().GetAllAdjacentCharacters();
+
+        bool hasEnemy = false;
+        foreach (GameObject Character in AdjacentUnits)
+        {
+            if (Character.tag == "EnemyUnit")
+            {
+                if (AssassinBuff)
+                {
+                    hasEnemy = true;
+                    AttackDamage /= 3;
+                    AssassinBuff = false;
+                }
+            }
+        }
+
+        if (!hasEnemy && !AssassinBuff)
+        {
+            AttackDamage *= 3;
+            AssassinBuff = true;
+        }
+    }
+
+
+    public void ConvictAction()
+    {
+        if (!mActiveActivated)
+        {
+            StartCoroutine(ConvictActionActivate());
+        }
+    }
+
+    IEnumerator ConvictActionActivate()
+    {
+        mActiveActivated = true;
+
+        while (mTurnGoing)
+            yield return null;
+
+        List<GameObject> AdjacentUnits = gameObject.GetComponent<Movement>().GetAllAdjacentCharacters();
+        foreach (GameObject Character in AdjacentUnits)
+        {
+            if (Character.tag == "EnemyUnit")
+            {
+                Character.GetComponent<CharacterStats>().MaxHealth -= 2;
+            }
+
+            if (Character.GetComponent<CharacterStats>().MaxHealth <= 0)
+            {
+                Character.GetComponent<CharacterStats>().MaxHealth = 1;
+            }
+        }
+        mActiveActivated = false;
+    }
+
+    public void RockstarAction()
+    {
+        if (!mActiveActivated)
+            StartCoroutine(RockstarActionCleanup());
+    
+        List<GameObject> AdjacentUnits = gameObject.GetComponent<Movement>().GetAllAdjacentCharacters();
+        foreach (GameObject Character in mFlowController.GetComponent<FlowController>().GetFriendlyUnits())
+        {
+            // If the unit is adjacent 
+            if (AdjacentUnits.Contains(Character)) {
+                if (!Character.GetComponent<CharacterStats>().RockstarBuff)
+                {
+                    Character.GetComponent<CharacterStats>().RockstarBuff = true;
+                    Character.GetComponent<CharacterStats>().AttackDamage += 5;
+                }
+            }
+            // If the unit isn't adjacent, remove the buff if it's active
+            else if (Character.GetComponent<CharacterStats>().RockstarBuff)
+            {
+                Character.GetComponent<CharacterStats>().RockstarBuff = false;
+                Character.GetComponent<CharacterStats>().AttackDamage -= 5;
+            }
+        }
+    }
+
+    // Need to remove rockstarbuff from everyone when the turn ends
+    IEnumerator RockstarActionCleanup()
+    {
+        AttackDamage -= 2;
+        mActiveActivated = true;
+
+        while (mTurnGoing)
+            yield return null;
+
+        foreach (GameObject Character in mFlowController.GetComponent<FlowController>().GetFriendlyUnits())
+        {
+            if (Character.GetComponent<CharacterStats>().RockstarBuff)
+            {
+                Character.GetComponent<CharacterStats>().RockstarBuff = false;
+                Character.GetComponent<CharacterStats>().AttackDamage -= 5;
+            }
+        }
+
+        AttackDamage += 2;
+        mActiveActivated = false;
     }
 
     // Active - Stops nearby enemy movement

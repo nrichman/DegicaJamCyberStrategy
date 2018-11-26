@@ -59,25 +59,24 @@ public class ButtonFunction : MonoBehaviour {
     public void UpdateDescriptionTextAction()
     {
         Text textComponent = GameObject.Find("DescriptionBar").GetComponentInChildren<Text>();
-
         switch (ActionSelector.mSelectedCharacter.name)
         {
             case "Bouncer":
                 textComponent.text = TEXT_BOUNCER;
                 break;
-            case "Convict":
+            case "Rebel":
                 textComponent.text = TEXT_CONVICT;
                 break;
             case "Sniper":
                 textComponent.text = TEXT_SNIPER;
                 break;
-            case "Rockstar":
+            case "Swordsman":
                 textComponent.text = TEXT_ROCKSTAR;
                 break;
-            case "Mechultist":
+            case "Healer":
                 textComponent.text = TEXT_MECHULTIST;
                 break;
-            case "Rat":
+            case "Mugger":
                 textComponent.text = TEXT_RAT;
                 break;
             default:
