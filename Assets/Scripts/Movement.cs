@@ -168,6 +168,12 @@ public class Movement : MonoBehaviour {
             FriendlyStats.MaxHealth -= FriendlyDamage;
         if (EnemyDamage > 0)
             EnemyStats.MaxHealth -= EnemyDamage;
+
+        // Rat's passive, Rat killed so heal
+        if (EnemyStats.MaxHealth <= 0 && FriendlyStats.mCharaterType == CharacterStats.CharacterType.RAT)
+        {
+            FriendlyStats.MaxHealth += FriendlyDamage;
+        }
     }
 
     IEnumerator PlayCombatAnimation (Transform Friendly, Transform Enemy)
@@ -234,11 +240,11 @@ public class Movement : MonoBehaviour {
     {
         List<GameObject> AdjacentCharacters = new List<GameObject>();
 
-        Vector3 offset = new Vector3(.5f, .5f, 0);
-        Vector3 upOne = transform.position.Round() + new Vector3(0, 1, 0) + offset;
-        Vector3 rightOne = transform.position.Round() + new Vector3(1, 0, 0) + offset;
-        Vector3 downOne = transform.position.Round() + new Vector3(0, -1, 0) + offset;
-        Vector3 leftOne = transform.position.Round() + new Vector3(1, 0, 0) + offset;
+        Vector3 offset = new Vector3(0f, 0f, 0);
+        Vector3 upOne = transform.position + new Vector3(0, 1, 0) + offset;
+        Vector3 rightOne = transform.position + new Vector3(1, 0, 0) + offset;
+        Vector3 downOne = transform.position + new Vector3(0, -1, 0) + offset;
+        Vector3 leftOne = transform.position + new Vector3(-1, 0, 0) + offset;
 
         Collider2D[] mColliders;
         if ((mColliders = Physics2D.OverlapCircleAll(upOne, 0f)).Length > 0)

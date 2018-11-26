@@ -12,10 +12,12 @@ public class CharacterStats : MonoBehaviour {
     public float Speed = 1;
     public int Action = 0;
 
+    public bool mStarted = false;
     public bool mTurnGoing = false; // Boolean telling the unit if other units are still moving
     private bool mActing; // Boolean telling the unit if it's personally still acting
     private GameObject infoBar;
     private bool mPassiveActivated = false; // Boolean used to know if the passive coroutine is running
+    private bool mActiveActivated = false;
 
     void Awake()
     {
@@ -74,6 +76,7 @@ public class CharacterStats : MonoBehaviour {
             case CharacterType.ROCKSTAR:
                 break;
             case CharacterType.MECHULTIST:
+                MechultistActive();
                 break;
             case CharacterType.RAT:
                 RatAction();
@@ -98,8 +101,10 @@ public class CharacterStats : MonoBehaviour {
             case CharacterType.ROCKSTAR:
                 break;
             case CharacterType.MECHULTIST:
+                MechultistPassive();
                 break;
             case CharacterType.RAT:
+                // Implemented in movement :(
                 break;
             default:
                 break;
@@ -137,19 +142,68 @@ public class CharacterStats : MonoBehaviour {
         mPassiveActivated = false;
     }
 
+    public void MechultistActive()
+    {
+        if (!mActiveActivated)
+        {
+            StartCoroutine(MechultistActiveActivate());
+        }
+    }
+
+    IEnumerator MechultistActiveActivate()
+    {
+        mActiveActivated = true;
+        while (mTurnGoing)
+        {
+            yield return null;
+        }
+
+        foreach (GameObject Unit in gameObject.GetComponent<Movement>().GetAllAdjacentCharacters())
+        {
+            Debug.Log(Unit.name);
+            if (Unit.tag == "FriendlyUnit")
+            {
+                Unit.GetComponent<CharacterStats>().MaxHealth += 2;
+            }
+        }
+        mActiveActivated = false;
+    }
+
+    public void MechultistPassive()
+    {
+        if (!mPassiveActivated)
+        {
+            StartCoroutine(MechultistPassiveActivate());
+        }
+    }
+
+    //The mechultist's passive heals it
+    IEnumerator MechultistPassiveActivate()
+    {
+        mPassiveActivated = true;
+        while (mTurnGoing)
+            yield return null;
+        MaxHealth += 2;
+        mPassiveActivated = false;
+    }
+
+    // The rat's active allows it to phase through enemies
     public void RatAction()
     {
-        StartCoroutine(RatActiveEnumerator());
+        if (!mActiveActivated)
+            StartCoroutine(RatActiveEnumerator());
     }
 
     IEnumerator RatActiveEnumerator()
     {
+        mActiveActivated = true;
         transform.GetComponent<BoxCollider2D>().enabled = false;
         while (mActing)
         {
             yield return null;
         }
         transform.GetComponent<BoxCollider2D>().enabled = true;
+        mActiveActivated = false;
     }
 
     // Leeerrooyyy
