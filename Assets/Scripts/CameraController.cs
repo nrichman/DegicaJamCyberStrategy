@@ -75,11 +75,16 @@ public class CameraController : MonoBehaviour {
             if (Position.y > mTilemapHeight)
                 Position.y = mTilemapHeight;
 
-            mCamera.orthographicSize -= Input.mouseScrollDelta.y * Time.deltaTime * mScaleSpeed;
+            float mouseScroll = Input.mouseScrollDelta.y;
+            mCamera.orthographicSize -= mouseScroll * Time.deltaTime * mScaleSpeed;
 
-            if (mTilemapHeight < 0)
+            if (mTilemapHeight < .1)
             {
-                mCamera.orthographicSize = mTilemap.size.y / 2 - 0.01f;
+                if (mouseScroll > 0)
+                    mCamera.orthographicSize -= mouseScroll * Time.deltaTime * mScaleSpeed;
+                else
+                    mCamera.orthographicSize = mTilemap.size.y / 2 - 0.01f;
+
             }
 
             if (mTilemapWidth < 0)
