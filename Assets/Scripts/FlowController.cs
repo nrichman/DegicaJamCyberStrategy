@@ -11,6 +11,7 @@ public class FlowController : MonoBehaviour {
     public bool mInMotion = false;
 
     public float mActionNum = 0;
+    public GameObject QuitMenu;
 
     // Use this for initialization
     void Start () {
@@ -50,6 +51,12 @@ public class FlowController : MonoBehaviour {
             }
 
             StartCoroutine(RunSequence());
+        }
+
+        // Bring up the retry menu
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            QuitMenu.SetActive(!QuitMenu.activeInHierarchy);
         }
     }
 

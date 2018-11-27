@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using UnityEngine;
 
 public class ButtonFunction : MonoBehaviour {
@@ -20,6 +21,11 @@ public class ButtonFunction : MonoBehaviour {
     //   Use this for initialization
     void Start () {
         ActionSelector = mActionSelector.GetComponent<ActionSelector>();
+    }
+
+    public void RestartScene()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 	
     public void ActionCancel()
