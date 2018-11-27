@@ -66,6 +66,9 @@ public class CursorScript : MonoBehaviour
         {
             foreach (var collider in mColliders)
             {
+                if (collider.tag == "MAP")
+                    return;
+
                 // If mouse collided with a friendly unit, start building its movement stack
                 if (collider.tag == "FriendlyUnit")
                 {

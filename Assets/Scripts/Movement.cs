@@ -133,6 +133,12 @@ public class Movement : MonoBehaviour {
 
     void OnTriggerEnter2D(Collider2D collision)
     {
+        if (collision.transform.tag == "MAP")
+        {
+            PushBack();
+            return;
+        }
+
         // Units are on opposite teams
         if (transform.tag != collision.tag)
         {
@@ -270,17 +276,29 @@ public class Movement : MonoBehaviour {
         Collider2D[] mColliders;
         if ((mColliders = Physics2D.OverlapCircleAll(upOne, 0f)).Length > 0)
             foreach (var collider in mColliders)
-                AdjacentCharacters.Add(collider.gameObject);
+            {
+                if (collider.gameObject.tag != "MAP")
+                    AdjacentCharacters.Add(collider.gameObject);
+            }
         if ((mColliders = Physics2D.OverlapCircleAll(upOne, 0f)).Length > 0)
             foreach (var collider in mColliders)
-                AdjacentCharacters.Add(collider.gameObject);
+            {
+                if (collider.gameObject.tag != "MAP")
+                    AdjacentCharacters.Add(collider.gameObject);
+            }
         if ((mColliders = Physics2D.OverlapCircleAll(downOne, 0f)).Length > 0)
             foreach (var collider in mColliders)
-                AdjacentCharacters.Add(collider.gameObject);
+            {
+                if (collider.gameObject.tag != "MAP")
+                    AdjacentCharacters.Add(collider.gameObject);
+            }
         if ((mColliders = Physics2D.OverlapCircleAll(leftOne, 0f)).Length > 0)
             foreach (var collider in mColliders)
-                AdjacentCharacters.Add(collider.gameObject);
-   
+            {
+                if (collider.gameObject.tag != "MAP")
+                    AdjacentCharacters.Add(collider.gameObject);
+            }
+
         return AdjacentCharacters;
     }
 
