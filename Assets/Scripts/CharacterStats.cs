@@ -133,7 +133,6 @@ public class CharacterStats : MonoBehaviour {
     IEnumerator AssassinActiveActivate()
     {
         mActiveActivated = true;
-        Debug.Log("YO");
         while (mTurnGoing)
             yield return null;
  

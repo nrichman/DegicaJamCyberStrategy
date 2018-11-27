@@ -84,7 +84,7 @@ public class CursorScript : MonoBehaviour
                         DrawMovementColors(collider.gameObject.GetComponent<Movement>().GetMovementStack());
                         mActionComponent.mAction = collider.gameObject.GetComponent<Movement>().mAction;
                         mActionComponent.mTurnText = collider.gameObject.GetComponent<Movement>().mTurnText;
-                        mActionComponent.Hovering(true);
+                        mActionComponent.Hovering(true, collider.gameObject);
                     }
                 }
                 collider.gameObject.GetComponent<CharacterStats>().UI_SetStats();

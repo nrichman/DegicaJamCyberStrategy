@@ -13,7 +13,7 @@ public class ActionSelector : MonoBehaviour {
     private string mAbilityText;
 
     // Shows the action buttons when hovering
-    public void ShowActionButtons()
+    public void ShowActionButtons(GameObject Character = null)
     {
         // Iterate through children. Top 3 are action buttons, fourth is cancel button
         // Need to disable all of the actions and highlight the selected action
@@ -23,7 +23,7 @@ public class ActionSelector : MonoBehaviour {
             // Hide the cancel button
             if (ChildNum == 3)
             {
-                if (mSelectedCharacter.GetComponent<Movement>().mTurnText != "")
+                if (!mPlanningAction)
                     child.gameObject.SetActive(false);
                 break;
             }
@@ -31,14 +31,14 @@ public class ActionSelector : MonoBehaviour {
             ChildNum++;
             childButton.interactable = false;
 
-            // I introduced a super gross bug at some point, here's a super gross bandaid to hold all this spaghetti together
-            // If we're hovering, use the character's action. If we're selecting, use mAction
-            if (mSelectedCharacter.GetComponent<Movement>().mTurnText != "" && ChildNum == mSelectedCharacter.GetComponent<CharacterStats>().Action)
-                ColorSelected(childButton);
-            else if (ChildNum == mAction)
+
+            // Highlight the character's selected action
+            if (Character != null && Character.GetComponent<CharacterStats>().Action == ChildNum)
                 ColorSelected(childButton);
             else
                 ColorNotSelected(childButton);
+
+
         }
     }
 
@@ -72,12 +72,12 @@ public class ActionSelector : MonoBehaviour {
         mPlanningAction = false;
     }
 
-    public void Hovering(bool Toggle)
+    public void Hovering(bool Toggle, GameObject Character = null)
     {
         if (Toggle)
         {
             gameObject.SetActive(true);
-            ShowActionButtons();
+            ShowActionButtons(Character);
         }
         else
         {
