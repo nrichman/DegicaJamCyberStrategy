@@ -46,7 +46,7 @@ public class FlowController : MonoBehaviour {
 	}
 
     // Update is called once per frame
-    void Update() {        
+    void Update() {
         // When played is pressed, set everything into motion
    		if (Input.GetKeyDown("space") &&
             !mActionSelector.GetComponent<ActionSelector>().mPlanningAction &&
@@ -232,5 +232,37 @@ public class FlowController : MonoBehaviour {
             }
         }
         return MyList;
+    }
+
+    // Checks if either team has no units remaining
+    public int CheckWinner()
+    {
+        int EnemyUnitCount = 0;
+        foreach (GameObject unit in mEnemyUnits)
+        {
+            if (unit != null)
+            {
+                EnemyUnitCount++;
+            }
+        }
+
+        // Returns 1 if no enemies remain
+        if (EnemyUnitCount == 0)
+            return 1;
+
+        int FriendlyUnitCount = 0;
+        foreach (GameObject unit in mFriendlyUnits)
+        {
+            if (unit != null)
+            {
+                FriendlyUnitCount++;
+            }
+        }
+
+        // Returns 2 if no allies remain
+        if (FriendlyUnitCount == 0)
+            return 2;
+
+        return 0;
     }
 }

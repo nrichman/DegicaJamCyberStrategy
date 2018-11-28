@@ -24,6 +24,7 @@ public class DialogueController : MonoBehaviour {
     public List<string> mCurrent;
 
     public GameObject mChildText;
+    public GameObject mDialogueBox;
 
     void Awake()
     {
@@ -135,7 +136,7 @@ public class DialogueController : MonoBehaviour {
         Mission3Narrator.Add(99);
         Mission3.Add("");
         Mission3Narrator.Add(2);
-        Mission3.Add("Great job taking out he guards guys, now just get the explosives planted and get the hell out of there.");
+        Mission3.Add("Great job taking out the guards guys, now just get the explosives planted and get the hell out of there.");
         Mission3Narrator.Add(2);
         Mission3.Add("After this we should all try to keep a low profile for a while. It was amazing working with you all, and I hope the best for all of you.");
 
@@ -158,19 +159,24 @@ public class DialogueController : MonoBehaviour {
 		
 	}
 
-    public void StartDialogue()
+    public void WonMission()
     {
-
+        DialogueGoing = true;
+        mDialogueBox.SetActive(true);
+        NextDialogue();
     }
 
     public void NextDialogue()
     {
+        // TODO: If statement, if DialogueNumber is over, need to go to the next thing
+
+
         // Set thing to Dialoguenarrator image
         mChildText.GetComponent<Text>().text = mCurrent[DialogueNumber];
         if (mCurrentNarrator[DialogueNumber] == 99)
         {
             DialogueGoing = false;
-            GameObject.Find("DialogueBox").SetActive(false);
+            mDialogueBox.SetActive(false);
         }
         DialogueNumber++;
     }

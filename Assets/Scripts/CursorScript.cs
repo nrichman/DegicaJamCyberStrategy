@@ -16,7 +16,7 @@ public class CursorScript : MonoBehaviour
     private List<Vector3> mMovementStack;
     private GameObject mSelectedCharacter;
 
-    private GameObject mFlowController;
+    private FlowController mFlowController;
     public GameObject mActionSelector;
     private ActionSelector mActionComponent;
 
@@ -29,7 +29,7 @@ public class CursorScript : MonoBehaviour
         mMouseLocation = transform.parent.gameObject.GetComponent<MouseLocation>();
         mDrawnObjects = new List<GameObject>();
         mMovementStack = new List<Vector3>();
-        mFlowController = GameObject.Find("FlowController");
+        mFlowController = GameObject.Find("FlowController").GetComponent<FlowController>();
         mActionComponent = mActionSelector.GetComponent<ActionSelector>();
         GameObject.Find("Allies").GetComponentInChildren<CharacterStats>().UI_SetStats();
         mDialogueController = GameObject.Find("DialogueController");
@@ -37,20 +37,25 @@ public class CursorScript : MonoBehaviour
 
     void Update()
     {
-        Debug.Log(mDialogueController.GetComponent<DialogueController>().DialogueGoing);
         if (mDialogueController.GetComponent<DialogueController>().DialogueGoing)
         {
-            Debug.Log("B");
+            mTileSelector.SetActive(false);
             return;
         }
 
         // If we're planning an action or the movement stage is happening, return
-        if (mActionComponent.mPlanningAction || mFlowController.GetComponent<FlowController>().mInMotion)
+        if (mActionComponent.mPlanningAction || mFlowController.mInMotion)
         {
-            if (mFlowController.GetComponent<FlowController>().mInMotion)
+            if (mFlowController.mInMotion)
                 DeleteDrawnObjects();
             mTileSelector.SetActive(false);
             return;
+        }
+
+        // Check to see if we won the mission
+        if (mFlowController.CheckWinner() == 1)
+        {
+            mDialogueController.GetComponent<DialogueController>().WonMission();
         }
 
         mTileSelector.SetActive(true);

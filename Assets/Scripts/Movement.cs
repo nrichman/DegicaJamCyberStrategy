@@ -198,7 +198,6 @@ public class Movement : MonoBehaviour {
 
     IEnumerator PlayCombatAnimation (Transform Friendly, Transform Enemy)
     {
-        Debug.Log("A");
         CharacterStats FriendlyStats = Friendly.GetComponent<CharacterStats>();
         CharacterStats EnemyStats = Enemy.GetComponent<CharacterStats>();
 
