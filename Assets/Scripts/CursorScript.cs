@@ -20,6 +20,8 @@ public class CursorScript : MonoBehaviour
     public GameObject mActionSelector;
     private ActionSelector mActionComponent;
 
+    private GameObject mDialogueController;
+
     void Start()
     {
         mLastPos = new Vector3Int(0, 0, 0);
@@ -30,10 +32,18 @@ public class CursorScript : MonoBehaviour
         mFlowController = GameObject.Find("FlowController");
         mActionComponent = mActionSelector.GetComponent<ActionSelector>();
         GameObject.Find("Allies").GetComponentInChildren<CharacterStats>().UI_SetStats();
+        mDialogueController = GameObject.Find("DialogueController");
     }
 
     void Update()
     {
+        Debug.Log(mDialogueController.GetComponent<DialogueController>().DialogueGoing);
+        if (mDialogueController.GetComponent<DialogueController>().DialogueGoing)
+        {
+            Debug.Log("B");
+            return;
+        }
+
         // If we're planning an action or the movement stage is happening, return
         if (mActionComponent.mPlanningAction || mFlowController.GetComponent<FlowController>().mInMotion)
         {

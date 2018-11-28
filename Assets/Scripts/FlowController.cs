@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 using UnityEngine;
 
 public class FlowController : MonoBehaviour {
@@ -12,6 +13,29 @@ public class FlowController : MonoBehaviour {
 
     public float mActionNum = 0;
     public GameObject QuitMenu;
+
+    // Place characters depending on what scene we're in
+    void Awake ()
+    {
+        GameObject AlliedUnits = GameObject.Find("Allies");
+        switch (SceneManager.GetActiveScene().name)
+        {
+            case ("Mission_1"):
+                break;
+            case ("Mission_2"):
+                break;
+            case ("Mission_3"):
+                Vector3 StartingPos = new Vector3(10.5f, -1.5f, 0);
+                foreach (Transform child in AlliedUnits.transform)
+                {
+                    child.transform.position = StartingPos;
+                    StartingPos -= new Vector3(0, 1, 0);
+                }
+                break;
+            default:
+                break;
+        }
+    }
 
     // Use this for initialization
     void Start () {
