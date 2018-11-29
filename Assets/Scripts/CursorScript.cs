@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine.UI;
 using UnityEngine;
 
 public class CursorScript : MonoBehaviour
@@ -21,6 +22,8 @@ public class CursorScript : MonoBehaviour
     private ActionSelector mActionComponent;
 
     private GameObject mDialogueController;
+
+    public GameObject mPassiveText;
 
     void Start()
     {
@@ -71,6 +74,7 @@ public class CursorScript : MonoBehaviour
             if (mSelectedCharacter == null)
             {
                 DeleteDrawnObjects();
+                mPassiveText.GetComponentInChildren<Text>().text = "";
                 mActionComponent.Hovering(false);
             }
         }
@@ -87,6 +91,8 @@ public class CursorScript : MonoBehaviour
                 // If mouse collided with a friendly unit, start building its movement stack
                 if (collider.tag == "FriendlyUnit")
                 {
+                    mPassiveText.GetComponentInChildren<Text>().text = collider.gameObject.GetComponent<CharacterStats>().GetCharacterPassive();
+
                     // New command to move a unit
                     if (Input.GetMouseButtonDown(0) && !collider.GetComponent<Movement>().mLocked)
                     {

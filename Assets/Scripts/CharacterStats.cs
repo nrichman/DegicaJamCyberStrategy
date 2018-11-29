@@ -24,10 +24,40 @@ public class CharacterStats : MonoBehaviour {
     public bool RockstarBuff = false;
     public bool AssassinBuff = false;
 
+    private static string TEXT_BOUNCER = "Sturdy: Increases defense while standing still.";
+    private static string TEXT_CONVICT = "Bloodlust: Gains permanant stats after killing an enemy.";
+    private static string TEXT_SNIPER = "Eagle Eye: Triples damage if there are no adjacent enemies.";
+    private static string TEXT_ROCKSTAR = "Redemption: Damages the enemy that killed this unit.";
+    private static string TEXT_MECHULTIST = "Repair: After the turn, heals self.";
+    private static string TEXT_RAT = "Initiative: Deals damage first during combat.";
+
     void Awake()
     {
         infoBar = GameObject.Find("InfoBar");
         mFlowController = GameObject.Find("FlowController");
+    }
+
+    // Switch to control each character's specific action
+    public string GetCharacterPassive()
+    {
+        switch (mCharaterType)
+        {
+            case CharacterType.BOUNCER:
+                return TEXT_BOUNCER;
+            case CharacterType.CONVICT:
+                return TEXT_CONVICT;
+            case CharacterType.ASSASSIN:
+                return TEXT_SNIPER;
+            case CharacterType.ROCKSTAR:
+                return TEXT_ROCKSTAR;
+            case CharacterType.MECHULTIST:
+                return TEXT_MECHULTIST;
+            case CharacterType.RAT:
+                return TEXT_RAT;
+            default:
+                break;
+        }
+        return "";
     }
 
     public enum CharacterType

@@ -12,10 +12,10 @@ public class ButtonFunction : MonoBehaviour {
     private static string TEXT_RUSH = "Rush: Move at double speed with impaired defence.";
     private static string TEXT_FORTIFY = "Fortify: Move at half speed with boosted defence.";
     private static string TEXT_BOUNCER = "Stopping Power: Stops the movement of adjacent enemies.";
-    private static string TEXT_CONVICT = "Spray and Pray: After moving, deals damage directly in front of unit.";
-    private static string TEXT_SNIPER = "Pinpoint Shot: After moving, fires a bullet dealing damage in a line.";
-    private static string TEXT_ROCKSTAR = "For the Cause: Lowers attack, increases attack of nearby allies.";
-    private static string TEXT_MECHULTIST = "Assimilate: After moving, heals all adjacent allies.";
+    private static string TEXT_CONVICT = "Spray and Pray: After the turn, deals damage to adjacent enemies.";
+    private static string TEXT_SNIPER = "Pinpoint Shot: After the turn, damages an enemy adjacent to another ally.";
+    private static string TEXT_ROCKSTAR = "For the Cause: Lowers attack, increases attack of adjacent allies.";
+    private static string TEXT_MECHULTIST = "Assimilate: After the turn, heals all adjacent allies.";
     private static string TEXT_RAT = "Phase: Phase through enemies, resulting in no combat.";
 
     //   Use this for initialization

@@ -13,10 +13,14 @@ public class FlowController : MonoBehaviour {
 
     public float mActionNum = 0;
     public GameObject QuitMenu;
+    public GameObject DescriptionBar;
+    public GameObject InfoBar;
 
     // Place characters depending on what scene we're in
     void Awake ()
     {
+        DescriptionBar = GameObject.Find("DescriptionBar");
+        InfoBar = GameObject.Find("InfoBar");
         GameObject AlliedUnits = GameObject.Find("Allies");
         switch (SceneManager.GetActiveScene().name)
         {
@@ -47,6 +51,13 @@ public class FlowController : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            DescriptionBar.SetActive(!DescriptionBar.activeInHierarchy);
+            InfoBar.SetActive(!InfoBar.activeInHierarchy);
+        }
+
+
         // When played is pressed, set everything into motion
    		if (Input.GetKeyDown("space") &&
             !mActionSelector.GetComponent<ActionSelector>().mPlanningAction &&

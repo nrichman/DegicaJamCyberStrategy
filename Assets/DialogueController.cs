@@ -48,6 +48,7 @@ public class DialogueController : MonoBehaviour {
             case ("Opening"):
                 mCurrentNarrator = OpeningNarrator;
                 mCurrent = Opening;
+                StartCoroutine(RunAutoDialogue());
                 break;
             case ("Mission_1"):
                 mCurrentNarrator = Mission1Narrator;
@@ -64,6 +65,7 @@ public class DialogueController : MonoBehaviour {
             case ("Ending"):
                 mCurrentNarrator = EndingNarrator;
                 mCurrent = Ending;
+                StartCoroutine(RunAutoDialogue());
                 break;
             default:
                 Debug.Log("YO");
@@ -81,6 +83,8 @@ public class DialogueController : MonoBehaviour {
 
     public void populateLists()
     {
+        OpeningNarrator.Add(1);
+        Opening.Add("");
         OpeningNarrator.Add(1);
         Opening.Add("By the year 2117, rising sea levels and temperature shifts have rendered much of the world uninhabitable. The population has been forced inland into massive megacities and arcologies.");
         OpeningNarrator.Add(1);
@@ -179,5 +183,17 @@ public class DialogueController : MonoBehaviour {
             mDialogueBox.SetActive(false);
         }
         DialogueNumber++;
+    }
+
+    IEnumerator RunAutoDialogue()
+    {
+        Debug.Log("STRRT");
+        foreach(string myText in mCurrent)
+        {
+            mChildText.GetComponent<Text>().text = myText;
+            for (int i = 0; i < 3000; i++)
+                yield return null;
+        }
+        SceneManager.LoadScene("Mission_3");
     }
 }
