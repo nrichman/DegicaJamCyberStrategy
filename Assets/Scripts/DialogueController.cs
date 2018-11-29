@@ -208,6 +208,6 @@ public class DialogueController : MonoBehaviour {
             mChildText.GetComponent<Text>().text = myText;
             yield return new WaitForSeconds(15);
         }
-        SceneManager.LoadScene("Mission_3");
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 }
