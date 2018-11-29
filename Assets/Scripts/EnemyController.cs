@@ -35,12 +35,18 @@ public class EnemyController : MonoBehaviour {
     {
         foreach (Transform child in transform)
         {
+            if (child == null || child.GetComponent<Movement>().mMovementStack == null)
+                continue;
             List<Vector3> MoveList = new List<Vector3>();
             Vector3 StartingPos = child.transform.position - new Vector3(0.5f, 0.5f, 0);
 
             for (int i = 0; i < child.GetComponent<CharacterStats>().Movement; i++)
             {
                 StartingPos += Directions[Random.Range(0, Directions.Count)];
+                if (Mathf.Abs(StartingPos.x) > 11.5f || Mathf.Abs(StartingPos.y) > 6.5f)
+                {
+                    break;
+                }
                 MoveList.Add(StartingPos);
             }
 

@@ -22,6 +22,7 @@ public class CursorScript : MonoBehaviour
     private ActionSelector mActionComponent;
 
     private GameObject mDialogueController;
+    private GameObject mCharacterPicker;
 
     public GameObject mPassiveText;
 
@@ -34,7 +35,7 @@ public class CursorScript : MonoBehaviour
         mMovementStack = new List<Vector3>();
         mFlowController = GameObject.Find("FlowController").GetComponent<FlowController>();
         mActionComponent = mActionSelector.GetComponent<ActionSelector>();
-        GameObject.Find("Allies").GetComponentInChildren<CharacterStats>().UI_SetStats();
+        //GameObject.Find("Allies").GetComponentInChildren<CharacterStats>().UI_SetStats();
         mDialogueController = GameObject.Find("DialogueController");
     }
 

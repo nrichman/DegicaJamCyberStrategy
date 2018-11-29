@@ -128,15 +128,19 @@ public class CameraController : MonoBehaviour {
     IEnumerator ZoomToCharacter(Vector3 CharacterPos)
     {
         CharacterPos.z = -10;
-        while (transform.position != CharacterPos)
-        {
-            transform.position = Vector3.MoveTowards(transform.position, CharacterPos, Time.deltaTime * 5);
-            yield return null;
-        }
+
 
         while (mCamera.orthographicSize > 3)
         {
             mCamera.orthographicSize -= Time.deltaTime * mAutoScaleSpeed;
+            if (transform.position != CharacterPos)
+                transform.position = Vector3.MoveTowards(transform.position, CharacterPos, Time.deltaTime * 100);
+            yield return null;
+        }
+
+        while (transform.position != CharacterPos)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, CharacterPos, Time.deltaTime * 100);
             yield return null;
         }
     }

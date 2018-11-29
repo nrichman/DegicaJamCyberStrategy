@@ -25,6 +25,7 @@ public class DialogueController : MonoBehaviour {
 
     public GameObject mChildText;
     public GameObject mDialogueBox;
+    public GameObject mCharacterPicker;
 
     void Awake()
     {
@@ -158,11 +159,6 @@ public class DialogueController : MonoBehaviour {
         Ending.Add("Miss Price, you're going to have to come with us.");
     }
 
-	// Update is called once per frame
-	void Update () {
-		
-	}
-
     public void WonMission()
     {
         DialogueGoing = true;
@@ -179,10 +175,26 @@ public class DialogueController : MonoBehaviour {
         mChildText.GetComponent<Text>().text = mCurrent[DialogueNumber];
         if (mCurrentNarrator[DialogueNumber] == 99)
         {
-            DialogueGoing = false;
+            mCharacterPicker.SetActive(true);
+            mCharacterPicker.GetComponent<CharacterPicker>(). SelectingCharacters = true;
             mDialogueBox.SetActive(false);
         }
         DialogueNumber++;
+
+        if (DialogueNumber == mCurrentNarrator.Count)
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        }
+    }
+
+
+    void Update ()
+    {
+        if (!mCharacterPicker.activeInHierarchy && mCharacterPicker.GetComponent<CharacterPicker>().SelectingCharacters == true)
+        {
+            mCharacterPicker.GetComponent<CharacterPicker>().SelectingCharacters = false;
+            DialogueGoing = false;
+        }
     }
 
     IEnumerator RunAutoDialogue()

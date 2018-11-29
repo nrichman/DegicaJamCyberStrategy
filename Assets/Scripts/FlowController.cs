@@ -16,12 +16,13 @@ public class FlowController : MonoBehaviour {
     public GameObject DescriptionBar;
     public GameObject InfoBar;
 
+    private DialogueController mDialogueController;
     // Place characters depending on what scene we're in
     void Awake ()
     {
+        mDialogueController = GameObject.Find("DialogueController").GetComponent<DialogueController>();
         DescriptionBar = GameObject.Find("DescriptionBar");
         InfoBar = GameObject.Find("InfoBar");
-        GameObject AlliedUnits = GameObject.Find("Allies");
         switch (SceneManager.GetActiveScene().name)
         {
             case ("Mission_1"):
@@ -29,12 +30,6 @@ public class FlowController : MonoBehaviour {
             case ("Mission_2"):
                 break;
             case ("Mission_3"):
-                Vector3 StartingPos = new Vector3(10.5f, -1.5f, 0);
-                foreach (Transform child in AlliedUnits.transform)
-                {
-                    child.transform.position = StartingPos;
-                    StartingPos -= new Vector3(0, 1, 0);
-                }
                 break;
             default:
                 break;
@@ -62,7 +57,8 @@ public class FlowController : MonoBehaviour {
    		if (Input.GetKeyDown("space") &&
             !mActionSelector.GetComponent<ActionSelector>().mPlanningAction &&
             !CheckMoving() &&
-            !mInMotion){
+            !mInMotion &&
+            !mDialogueController.DialogueGoing){
 
             mInMotion = true;
 
@@ -249,6 +245,7 @@ public class FlowController : MonoBehaviour {
     // Checks if either team has no units remaining
     public int CheckWinner()
     {
+        mFriendlyUnits = GameObject.FindGameObjectsWithTag("FriendlyUnit");
         int EnemyUnitCount = 0;
         foreach (GameObject unit in mEnemyUnits)
         {
