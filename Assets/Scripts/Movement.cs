@@ -236,7 +236,6 @@ public class Movement : MonoBehaviour {
     // Moves a unit back to the space it came from
     public void PushBack ()
     {
-        
         mMovementStack.Clear();
         mMovementStack.Push(mLastMovement  - new Vector3(.5f, .5f, 0));
     }

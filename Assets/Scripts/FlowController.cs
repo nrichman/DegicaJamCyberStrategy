@@ -104,6 +104,7 @@ public class FlowController : MonoBehaviour {
         mCanvas.SetActive(true);
         mInMotion = false;
         mCamera.StartGameplayCamera();
+        GameObject.Find("Enemies").GetComponent<EnemyController>().BuildMovement();
 
         // Fix hitboxes for player clicks
         foreach (GameObject FriendlyUnit in mFriendlyUnits)

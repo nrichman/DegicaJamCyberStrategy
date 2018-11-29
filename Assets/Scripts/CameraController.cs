@@ -108,7 +108,7 @@ public class CameraController : MonoBehaviour {
     {
         Vector3 Position = transform.position;
 
-        while (mTilemapHeight > 0)
+        while (mTilemapHeight > .01f)
         {
             transform.position = Vector3.MoveTowards(transform.position, new Vector3(0,0,-10), Time.deltaTime * mAutoScaleSpeed * 2);
             mCamera.orthographicSize += Time.deltaTime * mAutoScaleSpeed;
