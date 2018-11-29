@@ -85,8 +85,6 @@ public class DialogueController : MonoBehaviour {
     public void populateLists()
     {
         OpeningNarrator.Add(1);
-        Opening.Add("");
-        OpeningNarrator.Add(1);
         Opening.Add("By the year 2117, rising sea levels and temperature shifts have rendered much of the world uninhabitable. The population has been forced inland into massive megacities and arcologies.");
         OpeningNarrator.Add(1);
         Opening.Add("Several key corporations used the chaos of the 21st century to gradually push their control over the populace and the government. By the present, these corporations are essentially tyrants, promoting the lives of the the wealthy and powerful while grinding the majority of people to dust.");
@@ -94,7 +92,7 @@ public class DialogueController : MonoBehaviour {
         Opening.Add("You are Aurora Price, hacker and revolutionary. You have been fighting the corporations with your team of outlaws and weirdos. So far you have remained out from under their thumb, but every job pushes just a little bit farther...");
 
         Mission1Narrator.Add(2);
-        Mission1.Add("Alright guys, hitting another Nile data facility. This one’s pretty standard, all ya gotta do is take out the guards, get to the server room, and plug in the comm unit. The layout of the building can be found on your comms, good luck team.");
+        Mission1.Add("Alright guys, hitting another Nile data facility. This one’s pretty standard, all ya gotta do is take out the guards, get to the server room, and plug in the comm unit. Good luck team!");
         Mission1Narrator.Add(3);
         Mission1.Add("Okay boss, talk to ya in a couple minutes.");
         Mission1Narrator.Add(99);
@@ -108,7 +106,7 @@ public class DialogueController : MonoBehaviour {
         Mission1.Add("That’s a good question, I’ll set up a meeting with one of my sources from Nile.");
 
         Mission2Narrator.Add(2);
-        Mission2.Add("Alright, we’re gonna be meeting up with an informant from one of the Nile Deliveries research team who goes the name of Phoenix. He asked us to meet him in that alley over there, so head over with the comm unit.Keep an eye out! It’s dark and this areas not known for its safety.");
+        Mission2.Add("Alright, we’re gonna be meeting up with an informant from one of the Nile Deliveries research team, Phoenix. He asked us to meet him in that alley over there, so head over with the comm unit. Keep an eye out!");
         Mission2Narrator.Add(4);
         Mission2.Add("H-h-hey guys, are you Aurora’s entourage or something?");
         Mission2Narrator.Add(3);
@@ -124,7 +122,9 @@ public class DialogueController : MonoBehaviour {
         Mission2Narrator.Add(3);
         Mission2.Add("That was some real firepower! You had better tell us what this is all about, Phoenix.");
         Mission2Narrator.Add(4);
-        Mission2.Add("Alright, I looked into what Aurora asked me to, and it does not look good. It turns out that Nile commissioned some pretty serious stuff from Ares. They’re calling it “Parerinol” and it seems like a chemical that increases suggestibility and consumption.");
+        Mission2.Add("Alright, I looked into what Aurora asked me to, and it does not look good. It turns out that Nile commissioned some pretty serious stuff from Ares.");
+        Mission2Narrator.Add(4);
+        Mission2.Add("They’re calling it “Parerinol” and it seems like a chemical that increases suggestibility and consumption.");
         Mission2Narrator.Add(4);
         Mission2.Add("They took it to a research facility underneath their headquarters, I think that they’re going to put it in the cities water supply!");
         Mission2Narrator.Add(4);
@@ -183,6 +183,8 @@ public class DialogueController : MonoBehaviour {
 
         if (DialogueNumber == mCurrentNarrator.Count)
         {
+            if (SceneManager.GetActiveScene().buildIndex == 4)
+                Application.Quit();
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         }
     }
@@ -190,6 +192,8 @@ public class DialogueController : MonoBehaviour {
 
     void Update ()
     {
+        if (mCharacterPicker == null)
+            return;
         if (!mCharacterPicker.activeInHierarchy && mCharacterPicker.GetComponent<CharacterPicker>().SelectingCharacters == true)
         {
             mCharacterPicker.GetComponent<CharacterPicker>().SelectingCharacters = false;
@@ -199,7 +203,6 @@ public class DialogueController : MonoBehaviour {
 
     IEnumerator RunAutoDialogue()
     {
-        Debug.Log("STRRT");
         foreach(string myText in mCurrent)
         {
             mChildText.GetComponent<Text>().text = myText;
