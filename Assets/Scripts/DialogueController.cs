@@ -206,8 +206,7 @@ public class DialogueController : MonoBehaviour {
         foreach(string myText in mCurrent)
         {
             mChildText.GetComponent<Text>().text = myText;
-            for (int i = 0; i < 3000; i++)
-                yield return null;
+            yield return new WaitForSeconds(15);
         }
         SceneManager.LoadScene("Mission_3");
     }

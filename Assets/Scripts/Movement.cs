@@ -204,10 +204,7 @@ public class Movement : MonoBehaviour {
         Friendly.GetComponent<Animator>().SetBool("Attacking", true);
         Enemy.GetComponent<Animator>().SetBool("Attacking", true);
 
-        for (int i = 0; i < 400; i++)
-        {
-            yield return null;
-        }
+        yield return new WaitForSeconds(5);
 
         Friendly.GetComponent<Animator>().SetBool("Attacking", false);
         Enemy.GetComponent<Animator>().SetBool("Attacking", false);
