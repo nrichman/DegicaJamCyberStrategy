@@ -122,6 +122,8 @@ public class DialogueController : MonoBehaviour {
         Mission1.Add("Nile? But they’re just a delivery company. What are they getting from a weapons manufacturer?");
         Mission1Narrator.Add(2);
         Mission1.Add("That’s a good question, I’ll set up a meeting with one of my sources from Nile.");
+        Mission1Narrator.Add(1);
+        Mission1.Add("");
 
         Mission2Narrator.Add(1);
         Mission2.Add("MISSION 2");
@@ -153,6 +155,8 @@ public class DialogueController : MonoBehaviour {
         Mission2.Add("Well thanks Phoenix, you’ve done a good thing in speaking out here. We’ll do everything we can to take care of this without exposing you.");
         Mission2Narrator.Add(3);
         Mission2.Add("Aurora, we’re heading back to base.");
+        Mission2Narrator.Add(1);
+        Mission2.Add("");
 
         Mission3Narrator.Add(1);
         Mission3.Add("MISSION 3");
@@ -166,7 +170,9 @@ public class DialogueController : MonoBehaviour {
         Mission3.Add("Great job taking out the guards guys, now just get the explosives planted and get the hell out of there.");
         Mission3Narrator.Add(2);
         Mission3.Add("After this we should all try to keep a low profile for a while. It was amazing working with you all, and I hope the best for all of you.");
-
+        Mission3Narrator.Add(1);
+        Mission3.Add("");
+ 
         EndingNarrator.Add(1);
         Ending.Add("Several weeks later...");
         EndingNarrator.Add(1);
@@ -179,6 +185,8 @@ public class DialogueController : MonoBehaviour {
         Ending.Add("Wait... who are you guys?");
         EndingNarrator.Add(5);
         Ending.Add("Miss Price, you're going to have to come with us.");
+        EndingNarrator.Add(1);
+        Ending.Add("");
     }
 
     public void WonMission()

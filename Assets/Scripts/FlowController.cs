@@ -170,6 +170,10 @@ public class FlowController : MonoBehaviour {
         {
             foreach (GameObject unit2 in mFriendlyUnits)
             {
+                if (Unit == null || unit2 == null)
+                {
+                    continue;
+                }
                 if (Unit.transform.position == unit2.transform.position)
                 {
                     if (Unit == unit2)

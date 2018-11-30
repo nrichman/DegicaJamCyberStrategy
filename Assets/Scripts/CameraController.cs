@@ -37,6 +37,20 @@ public class CameraController : MonoBehaviour {
 
         if (mCamera.orthographicSize % 1 == 0)
             mCamera.orthographicSize -= .01f;
+
+        if (mTilemapHeight < 0)
+            mCamera.orthographicSize = mTilemap.size.y / 2;
+        Vector3 Position = transform.position;
+
+        // Keep the camera within bounds
+        if (Position.x < -mTilemapWidth)
+            Position.x = -mTilemapWidth;
+        if (Position.x > mTilemapWidth)
+            Position.x = mTilemapWidth;
+        if (Position.y < -mTilemapHeight)
+            Position.y = -mTilemapHeight;
+        if (Position.y > mTilemapHeight)
+            Position.y = mTilemapHeight;
     }
 
     IEnumerator GameplayCameraController()
