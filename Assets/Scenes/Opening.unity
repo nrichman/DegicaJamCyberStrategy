@@ -218,6 +218,9 @@ MonoBehaviour:
   mCurrent: []
   mChildText: {fileID: 855368544}
   mDialogueBox: {fileID: 380010156}
+  mCharacterPicker: {fileID: 0}
+  Speaker: {fileID: 0}
+  SpeakerChildren: []
 --- !u!4 &417188749
 Transform:
   m_ObjectHideFlags: 0
@@ -259,7 +262,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 692117ce049d1f94b8d148c9555a92dd, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.2
   m_Pitch: 1
   Loop: 0
   Mute: 0

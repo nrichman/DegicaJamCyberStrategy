@@ -47,12 +47,16 @@ public class DialogueController : MonoBehaviour {
 
         Speaker = GameObject.Find("Speaker");
         SpeakerChildren = new List<Transform>();
-        foreach (Transform child in GameObject.Find("Speaker").transform)
+        if (Speaker != null)
         {
-            SpeakerChildren.Add(child);
-            child.gameObject.SetActive(false);
+            foreach (Transform child in GameObject.Find("Speaker").transform)
+            {
+                SpeakerChildren.Add(child);
+                child.gameObject.SetActive(false);
+            }
+            Speaker.SetActive(false);
         }
-        Speaker.SetActive(false);
+
 
         populateLists();
 
