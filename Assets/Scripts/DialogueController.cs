@@ -27,6 +27,9 @@ public class DialogueController : MonoBehaviour {
     public GameObject mDialogueBox;
     public GameObject mCharacterPicker;
 
+    public GameObject Speaker;
+    public List<Transform> SpeakerChildren;
+
     void Awake()
     {
         DialogueGoing = true;
@@ -41,6 +44,15 @@ public class DialogueController : MonoBehaviour {
         Mission2 = new List<string>();
         Mission3 = new List<string>();
         Ending = new List<string>();
+
+        Speaker = GameObject.Find("Speaker");
+        SpeakerChildren = new List<Transform>();
+        foreach (Transform child in GameObject.Find("Speaker").transform)
+        {
+            SpeakerChildren.Add(child);
+            child.gameObject.SetActive(false);
+        }
+        Speaker.SetActive(false);
 
         populateLists();
 
@@ -91,6 +103,8 @@ public class DialogueController : MonoBehaviour {
         OpeningNarrator.Add(1);
         Opening.Add("You are Aurora Price, hacker and revolutionary. You have been fighting the corporations with your team of outlaws and weirdos. So far you have remained out from under their thumb, but every job pushes just a little bit farther...");
 
+        Mission1Narrator.Add(1);
+        Mission1.Add("MISSION 1");
         Mission1Narrator.Add(2);
         Mission1.Add("Alright guys, hitting another Nile data facility. This one’s pretty standard, all ya gotta do is take out the guards, get to the server room, and plug in the comm unit. Good luck team!");
         Mission1Narrator.Add(3);
@@ -105,6 +119,8 @@ public class DialogueController : MonoBehaviour {
         Mission1Narrator.Add(2);
         Mission1.Add("That’s a good question, I’ll set up a meeting with one of my sources from Nile.");
 
+        Mission2Narrator.Add(1);
+        Mission2.Add("MISSION 2");
         Mission2Narrator.Add(2);
         Mission2.Add("Alright, we’re gonna be meeting up with an informant from one of the Nile Deliveries research team, Phoenix. He asked us to meet him in that alley over there, so head over with the comm unit. Keep an eye out!");
         Mission2Narrator.Add(4);
@@ -134,6 +150,8 @@ public class DialogueController : MonoBehaviour {
         Mission2Narrator.Add(3);
         Mission2.Add("Aurora, we’re heading back to base.");
 
+        Mission3Narrator.Add(1);
+        Mission3.Add("MISSION 3");
         Mission3Narrator.Add(2);
         Mission3.Add("Team, this is a big mission, we’ll be going into a secret lab underneath Nile Deliveries HQ, where they are going to put a mind-suppressing drug in the water supply. We have to destroy it!");
         Mission3Narrator.Add(2);
@@ -168,10 +186,27 @@ public class DialogueController : MonoBehaviour {
 
     public void NextDialogue()
     {
-        // TODO: If statement, if DialogueNumber is over, need to go to the next thing
+        foreach (Transform child in SpeakerChildren)
+        {
+            if (child.gameObject.activeInHierarchy)
+                child.gameObject.SetActive(false);
+        }
 
-
-        // Set thing to Dialoguenarrator image
+        switch (mCurrentNarrator[DialogueNumber] - 2)
+        {
+            case 0:
+            case 1:
+            case 2:
+            case 3:
+                Speaker.SetActive(true);
+                SpeakerChildren[mCurrentNarrator[DialogueNumber] - 2].gameObject.SetActive(true);
+                break;
+            default:
+                Speaker.SetActive(false);
+                break;
+        }
+        if (mCurrentNarrator[DialogueNumber] - 2 < 5)
+            SpeakerChildren[mCurrentNarrator[DialogueNumber] - 2].gameObject.SetActive(true);
         mChildText.GetComponent<Text>().text = mCurrent[DialogueNumber];
         if (mCurrentNarrator[DialogueNumber] == 99)
         {
