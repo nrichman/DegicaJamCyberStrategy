@@ -166,6 +166,21 @@ public class FlowController : MonoBehaviour {
             Unit.GetComponent<CharacterStats>().mTurnGoing = false;
         }
 
+        foreach (GameObject Unit in mFriendlyUnits)
+        {
+            foreach (GameObject unit2 in mFriendlyUnits)
+            {
+                if (Unit.transform.position == unit2.transform.position)
+                {
+                    if (Unit == unit2)
+                        continue;
+                    Unit.GetComponent<CharacterStats>().mTurnGoing = true;
+                    Unit.GetComponent<Movement>().mMovementStack.Push(Unit.transform.position + new Vector3(0, 1, 0));
+                    return true;
+                }
+            }
+        }
+
         return false;
     }
 
