@@ -129,7 +129,6 @@ public class CameraController : MonoBehaviour {
     {
         CharacterPos.z = -10;
 
-
         while (mCamera.orthographicSize > 3)
         {
             mCamera.orthographicSize -= Time.deltaTime * mAutoScaleSpeed;

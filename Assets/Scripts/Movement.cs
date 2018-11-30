@@ -146,7 +146,7 @@ public class Movement : MonoBehaviour {
             // Check the friendly character's collision, important that we only do one battle!
             if (transform.tag == "FriendlyUnit")
             {
-               DealCombatDamage(transform, collision.transform);
+                StartCoroutine(ggGoNextCombat(transform, collision.transform));
             }
 
             if (transform.GetComponent<CharacterStats>().MaxHealth > 0)
@@ -160,8 +160,18 @@ public class Movement : MonoBehaviour {
         }
     }
 
+    IEnumerator ggGoNextCombat(Transform Friendly, Transform Enemy)
+    {
+        while (GameObject.Find("FlowController").GetComponent<FlowController>().mZooming)
+        {
+            yield return null;
+        }
+        DealCombatDamage(Friendly, Enemy);
+    }
+
     void DealCombatDamage (Transform Friendly, Transform Enemy)
     {
+
         GameObject.Find("FlowController").GetComponent<FlowController>().InitiateCombat(transform.position);
         StartCoroutine(PlayCombatAnimation(Friendly, Enemy));
         CharacterStats FriendlyStats = Friendly.GetComponent<CharacterStats>();
@@ -194,6 +204,7 @@ public class Movement : MonoBehaviour {
             FriendlyStats.AttackDamage += 1;
             FriendlyStats.Movement += 1;
         }
+        GameObject.Find("FlowController").GetComponent<FlowController>().mZooming = false;
     }
 
     IEnumerator PlayCombatAnimation (Transform Friendly, Transform Enemy)
@@ -221,6 +232,7 @@ public class Movement : MonoBehaviour {
         if (EnemyStats.MaxHealth > 0 && FriendlyStats.MaxHealth > 0)
         {
             PushBack();
+            Enemy.GetComponent<Movement>().PushBack();
         }
         GameObject.Find("FlowController").GetComponent<FlowController>().WakeAll();
     }

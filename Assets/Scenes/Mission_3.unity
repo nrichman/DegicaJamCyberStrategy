@@ -1674,6 +1674,7 @@ MonoBehaviour:
   QuitMenu: {fileID: 1061230722}
   DescriptionBar: {fileID: 0}
   InfoBar: {fileID: 0}
+  mZooming: 0
 --- !u!4 &576353136
 Transform:
   m_ObjectHideFlags: 0

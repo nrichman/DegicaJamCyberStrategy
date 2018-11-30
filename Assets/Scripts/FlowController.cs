@@ -17,6 +17,8 @@ public class FlowController : MonoBehaviour {
     public GameObject InfoBar;
 
     private DialogueController mDialogueController;
+
+    public bool mZooming = false;
     // Place characters depending on what scene we're in
     void Awake ()
     {
@@ -65,6 +67,8 @@ public class FlowController : MonoBehaviour {
             // Need to loop through all units and start their motions
             foreach (GameObject FriendlyUnit in mFriendlyUnits)
             {
+                if (FriendlyUnit == null)
+                    continue;
                 Movement FriendlyUnitMovement = FriendlyUnit.GetComponent<Movement>();
                 FriendlyUnit.GetComponent<CharacterStats>().mTurnGoing = true;
                 FriendlyUnitMovement.mInMotion = true;
@@ -74,6 +78,8 @@ public class FlowController : MonoBehaviour {
 
             foreach (GameObject EnemyUnit in mEnemyUnits)
             {
+                if (EnemyUnit == null)
+                    continue;
                 Movement EnemyUnitMovement = EnemyUnit.GetComponent<Movement>();
                 EnemyUnit.GetComponent<CharacterStats>().mTurnGoing = true;
                 EnemyUnitMovement.mInMotion = true;
@@ -207,6 +213,7 @@ public class FlowController : MonoBehaviour {
     // Handles combat interactions
     public void InitiateCombat (Vector3 PlayerPos)
     {
+        mZooming = true;
         mCamera.StartZoomToCharacter(PlayerPos);
     }
 

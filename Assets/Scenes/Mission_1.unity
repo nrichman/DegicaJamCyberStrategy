@@ -1802,6 +1802,7 @@ MonoBehaviour:
   QuitMenu: {fileID: 1061230722}
   DescriptionBar: {fileID: 0}
   InfoBar: {fileID: 0}
+  mZooming: 0
 --- !u!4 &576353136
 Transform:
   m_ObjectHideFlags: 0
@@ -2308,6 +2309,10 @@ Prefab:
     - target: {fileID: 4109908060132942, guid: 0e3f8851137ba6540a4e41b330b04578, type: 2}
       propertyPath: m_RootOrder
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1684582890975470, guid: 0e3f8851137ba6540a4e41b330b04578, type: 2}
+      propertyPath: m_TagString
+      value: MAP
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0e3f8851137ba6540a4e41b330b04578, type: 2}
