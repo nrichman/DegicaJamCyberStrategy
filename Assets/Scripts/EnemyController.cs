@@ -43,6 +43,10 @@ public class EnemyController : MonoBehaviour {
             for (int i = 0; i < child.GetComponent<CharacterStats>().Movement; i++)
             {
                 StartingPos += Directions[Random.Range(0, Directions.Count)];
+                if (StartingPos.x % 1 == 0)
+                {
+                    StartingPos.x += 0.5f;
+                }
                 if (Mathf.Abs(StartingPos.x) > 11.5f || Mathf.Abs(StartingPos.y) > 6.5f)
                 {
                     break;

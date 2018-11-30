@@ -215,7 +215,7 @@ public class Movement : MonoBehaviour {
         Friendly.GetComponent<Animator>().SetBool("Attacking", true);
         Enemy.GetComponent<Animator>().SetBool("Attacking", true);
 
-        yield return new WaitForSeconds(5);
+        yield return new WaitForSeconds(4);
 
         Friendly.GetComponent<Animator>().SetBool("Attacking", false);
         Enemy.GetComponent<Animator>().SetBool("Attacking", false);
@@ -235,6 +235,7 @@ public class Movement : MonoBehaviour {
             Enemy.GetComponent<Movement>().PushBack();
         }
         GameObject.Find("FlowController").GetComponent<FlowController>().WakeAll();
+        GameObject.Find("Main Camera").GetComponent<CameraController>().StartZoomOut();
     }
 
     public void PlayAnimation(Transform Friendly, Transform Enemy)
