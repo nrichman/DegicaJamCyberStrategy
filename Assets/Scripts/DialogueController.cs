@@ -115,8 +115,6 @@ public class DialogueController : MonoBehaviour {
         Mission1.Add("Okay boss, talk to ya in a couple minutes.");
         Mission1Narrator.Add(99);
         Mission1.Add("");
-        Mission1Narrator.Add(1);
-        Mission1.Add("WIN");
         Mission1Narrator.Add(2);
         Mission1.Add("Another job well done. We got tons of good data for transfer…");
         Mission1.Add("Wait, what’s this? Confidential shipments from Ares Technologies?");
@@ -141,9 +139,7 @@ public class DialogueController : MonoBehaviour {
         Mission2.Add("Stay back, Phoenix! Looks like this is gonna get messy.");
         Mission2Narrator.Add(99);
         Mission2.Add("");
-        Mission2Narrator.Add(1);
-        Mission2.Add("WIN");
-        Mission2Narrator.Add(3);
+        Mission2Narrator.Add(2);
         Mission2.Add("That was some real firepower! You had better tell us what this is all about, Phoenix.");
         Mission2Narrator.Add(4);
         Mission2.Add("Alright, I looked into what Aurora asked me to, and it does not look good. It turns out that Nile commissioned some pretty serious stuff from Ares.");
@@ -166,8 +162,6 @@ public class DialogueController : MonoBehaviour {
         Mission3.Add("You have the map of the lab as supplied by Phoenix, you’ll want to take out all the guards so you can plant the explosives.");
         Mission3Narrator.Add(99);
         Mission3.Add("");
-        Mission3.Add("WIN");
-        Mission3Narrator.Add(3);
         Mission3Narrator.Add(2);
         Mission3.Add("Great job taking out the guards guys, now just get the explosives planted and get the hell out of there.");
         Mission3Narrator.Add(2);
@@ -215,7 +209,7 @@ public class DialogueController : MonoBehaviour {
                 Speaker.SetActive(false);
                 break;
         }
-        if (mCurrentNarrator[DialogueNumber] - 2 < 5)
+        if (mCurrentNarrator[DialogueNumber] - 2 < 5 && mCurrentNarrator[DialogueNumber] - 2 > 0)
             SpeakerChildren[mCurrentNarrator[DialogueNumber] - 2].gameObject.SetActive(true);
         mChildText.GetComponent<Text>().text = mCurrent[DialogueNumber];
         if (mCurrentNarrator[DialogueNumber] == 99)

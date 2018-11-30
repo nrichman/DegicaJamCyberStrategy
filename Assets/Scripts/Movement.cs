@@ -171,7 +171,6 @@ public class Movement : MonoBehaviour {
 
     void DealCombatDamage (Transform Friendly, Transform Enemy)
     {
-
         GameObject.Find("FlowController").GetComponent<FlowController>().InitiateCombat(transform.position);
         StartCoroutine(PlayCombatAnimation(Friendly, Enemy));
         CharacterStats FriendlyStats = Friendly.GetComponent<CharacterStats>();
@@ -236,11 +235,6 @@ public class Movement : MonoBehaviour {
         }
         GameObject.Find("FlowController").GetComponent<FlowController>().WakeAll();
         GameObject.Find("Main Camera").GetComponent<CameraController>().StartZoomOut();
-    }
-
-    public void PlayAnimation(Transform Friendly, Transform Enemy)
-    {
-        StartCoroutine(PlayCombatAnimation(Friendly, Enemy));
     }
 
     // Moves a unit back to the space it came from

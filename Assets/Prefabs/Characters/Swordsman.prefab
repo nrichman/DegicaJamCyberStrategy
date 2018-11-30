@@ -122,10 +122,13 @@ MonoBehaviour:
   MaxHealth: 13
   AttackDamage: 3
   Defense: 1
-  Movement: 5
+  Movement: 6
   Speed: 1
   Action: 0
+  mStarted: 0
   mTurnGoing: 0
+  RockstarBuff: 0
+  AssassinBuff: 0
   mCharaterType: 3
 --- !u!114 &114719799485731804
 MonoBehaviour:
